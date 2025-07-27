@@ -126,7 +126,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.get(`${API_URL}/orders`);
+      const res = await axios.get(`${API_URL}/api/orders`);
       setOrders(res.data || []);
     } catch (err) {
       setError("خطا در دریافت سفارش‌ها: " + err.message);
@@ -139,7 +139,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.get(`${API_URL}/weeklyRevenue/1`);
+      const res = await axios.get(`${API_URL}/api/weeklyRevenue/1`);
       setWeeklyRevenue(res.data || { id: 1, total: 0, daily: Array(7).fill(0) });
     } catch (err) {
       setError("خطا در دریافت درآمد: " + err.message);
@@ -152,7 +152,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.get(`${API_URL}/discounts`);
+      const res = await axios.get(`${API_URL}/api/discounts`);
       const now = Date.now();
       const oneDay = 24 * 60 * 60 * 1000;
       const validDiscounts = res.data.filter(d => now - d.timestamp < oneDay);
@@ -209,13 +209,13 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.get(`${API_URL}/users?phoneNumber=${phoneNumber}`);
+      const res = await axios.get(`${API_URL}/api/users?phoneNumber=${phoneNumber}`);
       if (res.data.length > 0) {
         setError("این شماره موبایل قبلاً ثبت شده است.");
         return;
       }
       const newUser = { phoneNumber, name: userName || "", id: Date.now().toString() };
-      await axios.post(`${API_URL}/users`, newUser);
+      await axios.post(`${API_URL}/api/users`, newUser);
       setCurrentUser(newUser);
       setIsLoggedIn(true);
       setPage("dashboard");
@@ -238,7 +238,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.get(`${API_URL}/users?phoneNumber=${phoneNumber}`);
+      const res = await axios.get(`${API_URL}/api/users?phoneNumber=${phoneNumber}`);
       if (phoneNumber === "09901295140") {
         setShowAdminLogin(true);
         return;
@@ -264,7 +264,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.post(`${API_URL}/admin-login`, { password: adminPassword });
+      const res = await axios.post(`${API_URL}/api/admin-login`, { password: adminPassword });
       if (res.data.success) {
         setCurrentUser({ phoneNumber: "09901295140", name: "مدیر", id: "admin" });
         setIsLoggedIn(true);
@@ -322,7 +322,7 @@ function App() {
         const now = Date.now();
         const oneDay = 24 * 60 * 60 * 1000;
         const lastDiscount = await axios.get(
-          `${API_URL}/discounts?userPhone=${currentUser.phoneNumber}&_sort=timestamp&_order=desc&_limit=1`
+          `${API_URL}/api/discounts?userPhone=${currentUser.phoneNumber}&_sort=timestamp&_order=desc&_limit=1`
         );
         if (!lastDiscount.data.length || now - lastDiscount.data[0].timestamp > oneDay) {
           let discountAmount = 0;
@@ -339,7 +339,7 @@ function App() {
               userPhone: currentUser.phoneNumber,
               id: Date.now().toString(),
             };
-            await axios.post(`${API_URL}/discounts`, newDiscount);
+            await axios.post(`${API_URL}/api/discounts`, newDiscount);
             setDiscounts(prev => [
               ...prev.filter(d => now - d.timestamp < oneDay),
               newDiscount,
@@ -439,7 +439,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.post(`${API_URL}/orders`, newOrder);
+      const res = await axios.post(`${API_URL}/api/orders`, newOrder);
       setOrders(prev => [...prev, res.data]);
       setSelectedItems([]);
       setTableNumber("");
@@ -479,13 +479,13 @@ function App() {
           const newDaily = [...weeklyRevenue.daily];
           newDaily[dayIndex] = (newDaily[dayIndex] || 0) + orderTotal;
           const newTotal = weeklyRevenue.total + orderTotal;
-          await axios.patch(`${API_URL}/weeklyRevenue/1`, {
+          await axios.patch(`${API_URL}/api/weeklyRevenue/1`, {
             total: newTotal,
             daily: newDaily,
           });
           setWeeklyRevenue({ id: 1, total: newTotal, daily: newDaily });
         }
-        await axios.delete(`${API_URL}/orders/${orderId}`);
+        await axios.delete(`${API_URL}/api/orders/${orderId}`);
         setOrders(prev => prev.filter(o => o.id !== orderId));
         setError("سفارش با موفقیت تایید شد.");
       } catch (err) {
@@ -501,7 +501,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      await axios.patch(`${API_URL}/weeklyRevenue/1`, {
+      await axios.patch(`${API_URL}/api/weeklyRevenue/1`, {
         total: 0,
         daily: Array(7).fill(0),
       });
