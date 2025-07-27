@@ -11,18 +11,14 @@ body {
   background: linear-gradient(135deg, #fff8f0 0%, #f1e9df 100%);
   color: #3a2b1f;
   min-height: 100vh;
-  padding: 20px;
+  padding: 15px;
   font-size: 16px;
-}
-
-.dorehami-title {
-  font-family: 'Vazir', sans-serif;
 }
 
 /* پیام‌های خطا و موفقیت */
 .error-text, .loading-text {
   position: fixed;
-  top: 20px;
+  top: 15px;
   left: 50%;
   transform: translateX(-50%);
   padding: 12px 20px;
@@ -36,13 +32,13 @@ body {
   gap: 8px;
   max-width: 90%;
   text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .error-text {
   background-color: #ffe6e6;
   color: #b44332;
   border: 2px solid #b44332;
-  box-shadow: 0 4px 12px rgba(180, 67, 50, 0.3);
 }
 
 .error-text::before {
@@ -54,7 +50,6 @@ body {
   background-color: #e6f3ff;
   color: #2b6cb0;
   border: 2px solid #2b6cb0;
-  box-shadow: 0 4px 12px rgba(43, 108, 176, 0.3);
 }
 
 .loading-text::before {
@@ -75,12 +70,12 @@ button {
   border: none;
   border-radius: 8px;
   padding: 10px 16px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   transition: background 0.3s ease, transform 0.2s ease;
 }
 
-button:hover {
+button:hover:not(:disabled) {
   background: linear-gradient(135deg, #7c3f24 0%, #9b5432 100%);
   transform: translateY(-2px);
 }
@@ -96,30 +91,30 @@ button[disabled] {
 .pages-button {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  margin-bottom: 25px;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .pages-button button {
-  padding: 12px 30px;
+  padding: 10px 25px;
   font-size: 16px;
   border-radius: 10px;
   box-shadow: 0 3px 8px rgba(94, 41, 25, 0.2);
 }
 
 .pages-button button.active,
-.pages-button button:hover {
+.pages-button button:hover:not(:disabled) {
   background: linear-gradient(135deg, #7c3f24 0%, #9b5432 100%);
-  color: #fff;
   box-shadow: 0 5px 12px rgba(94, 41, 25, 0.4);
 }
 
 /* تیتر اصلی */
 h1 {
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   font-weight: 900;
-  font-size: 2.5rem;
+  font-size: 2.3rem;
   color: #5e2919;
   text-shadow: 0 2px 4px rgba(94, 41, 25, 0.2);
 }
@@ -129,80 +124,83 @@ h1 {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 30px;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .category-buttons button {
-  padding: 12px 20px;
+  padding: 10px 18px;
   background-color: #d9cbbf;
   color: #5e2919;
   font-weight: 700;
-  border-radius: 30px;
+  border-radius: 25px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
 
 .category-buttons button.active,
-.category-buttons button:hover {
+.category-buttons button:hover:not(:disabled) {
   background: linear-gradient(135deg, #5e2919 0%, #7c3f24 100%);
   color: #fff;
-  box-shadow: 0 5px 15px rgba(94, 41, 25, 0.5);
-  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(94, 41, 25, 0.5);
 }
 
 /* منوی آیتم‌ها */
 .menu {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-  margin-bottom: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
 }
 
 .menu-item {
   background: #f9f6f2;
-  border-radius: 14px;
-  padding: 20px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 420px;
+  height: 380px;
   transition: all 0.3s ease;
 }
 
-.menu-item:hover {
-  box-shadow: 0 8px 20px rgba(94, 41, 25, 0.3);
-  transform: translateY(-5px);
+.menu-item:hover:not(:disabled) {
+  box-shadow: 0 6px 15px rgba(94, 41, 25, 0.3);
+  transform: translateY(-3px);
 }
 
 .menu-item h3 {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   color: #5e2919;
 }
 
 .menu-item p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #7b5a39;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .menu-item img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
   transition: transform 0.3s ease;
 }
 
-.menu-item img:hover {
-  transform: scale(1.08);
+.menu-item img:hover:not(:disabled) {
+  transform: scale(1.05);
 }
 
 /* ستاره‌های امتیاز */
 .stars {
-  margin-bottom: 15px;
-  font-size: 22px;
+  margin-bottom: 12px;
+  font-size: 20px;
 }
 
 .stars span {
@@ -220,11 +218,11 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .quantity-control button {
-  padding: 8px 14px;
+  padding: 8px 12px;
   font-size: 16px;
   border-radius: 6px;
 }
@@ -237,38 +235,38 @@ h1 {
 /* سفارش شما */
 .order {
   background: #f1e9df;
-  padding: 25px;
-  border-radius: 14px;
-  box-shadow: 0 5px 15px rgba(94, 41, 25, 0.2);
-  max-width: 600px;
-  margin: 0 auto 40px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(94, 41, 25, 0.2);
+  max-width: 100%;
+  margin: 0 auto 30px;
 }
 
 .order h2 {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   font-weight: 900;
-  font-size: 1.9rem;
+  font-size: 1.8rem;
   color: #5e2919;
   text-align: center;
 }
 
 .order ul {
   list-style: none;
-  margin-bottom: 20px;
-  max-height: 300px;
+  margin-bottom: 15px;
+  max-height: 250px;
   overflow-y: auto;
-  padding-right: 10px;
+  padding-right: 8px;
   user-select: text;
 }
 
 .order ul li {
-  padding: 10px 0;
+  padding: 8px 0;
   border-bottom: 1px solid #d6c9b8;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #6a4a2d;
 }
 
@@ -280,12 +278,12 @@ h1 {
   transition: background 0.3s ease;
 }
 
-.order ul li button.remove-button:hover {
+.order ul li button.remove-button:hover:not(:disabled) {
   background: #d65447;
 }
 
 .order .total-price {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 700;
   margin-bottom: 15px;
   text-align: center;
@@ -294,12 +292,12 @@ h1 {
 
 .order input[type="number"] {
   width: 100%;
-  padding: 12px 15px;
+  padding: 10px 12px;
   font-size: 16px;
   border: 2px solid #5e2919;
-  border-radius: 10px;
+  border-radius: 8px;
   outline: none;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   direction: ltr;
   -webkit-appearance: none;
@@ -308,113 +306,112 @@ h1 {
 
 .order input[type="number"]:focus {
   border-color: #7c3f24;
-  box-shadow: 0 0 8px rgba(124, 63, 36, 0.3);
+  box-shadow: 0 0 6px rgba(124, 63, 36, 0.3);
 }
 
 .order > button {
   display: block;
   margin: 0 auto;
-  padding: 12px 35px;
+  padding: 10px 30px;
   font-size: 16px;
   font-weight: 700;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 /* پنل ورود */
 .login-panel {
-  max-width: 380px;
-  margin: 60px auto;
-  padding: 30px;
+  max-width: 90%;
+  margin: 40px auto;
+  padding: 20px;
   background: #f1e9df;
-  border-radius: 14px;
-  box-shadow: 0 6px 20px rgba(94, 41, 25, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(94, 41, 25, 0.2);
   text-align: center;
 }
 
 .login-panel h2 {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   font-weight: 900;
-  font-size: 1.9rem;
+  font-size: 1.7rem;
   color: #5e2919;
 }
 
 .login-panel input {
   width: 100%;
-  padding: 12px 15px;
+  padding: 10px 12px;
   font-size: 16px;
   border: 2px solid #5e2919;
-  border-radius: 10px;
+  border-radius: 8px;
   outline: none;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   direction: ltr;
 }
 
 .login-panel input:focus {
   border-color: #7c3f24;
-  box-shadow: 0 0 8px rgba(124, 63, 36, 0.3);
+  box-shadow: 0 0 6px rgba(124, 63, 36, 0.3);
 }
 
 .login-panel button {
-  margin: 0 6px;
-  padding: 10px 20px;
+  margin: 0 5px;
+  padding: 8px 18px;
   border-radius: 8px;
 }
 
 /* داشبورد */
 .dashboard {
-  max-width: 600px;
-  margin: 60px auto;
-  padding: 30px;
+  max-width: 90%;
+  margin: 40px auto;
+  padding: 20px;
   background: #f1e9df;
-  border-radius: 14px;
-  box-shadow: 0 6px 20px rgba(94, 41, 25, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(94, 41, 25, 0.2);
   text-align: center;
 }
 
 .dashboard h2 {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   font-weight: 900;
-  font-size: 1.9rem;
+  font-size: 1.7rem;
   color: #5e2919;
 }
 
 .dashboard .discount-info {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #6a4a2d;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .dashboard h3 {
-  margin: 25px 0 15px;
+  margin: 20px 0 15px;
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: #5e2919;
 }
 
 .dashboard .discount-cards {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-bottom: 25px;
-  padding-right: 10px;
-  max-height: 320px;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-right: 8px;
+  max-height: 280px;
   overflow-y: auto;
 }
 
 .dashboard .discount-card {
   background: linear-gradient(135deg, #5e2919 0%, #7c3f24 100%);
   color: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(94, 41, 25, 0.4);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(94, 41, 25, 0.3);
+  transition: transform 0.3s ease;
 }
 
-.dashboard .discount-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(94, 41, 25, 0.6);
+.dashboard .discount-card:hover:not(.expired) {
+  transform: translateY(-3px);
 }
 
 .dashboard .discount-card.expired {
@@ -424,91 +421,91 @@ h1 {
 }
 
 .dashboard .discount-card p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
-  margin: 10px 0;
+  margin: 8px 0;
 }
 
 .dashboard button {
-  margin: 10px 6px;
-  padding: 10px 25px;
+  margin: 8px 5px;
+  padding: 8px 20px;
   font-size: 15px;
   border-radius: 8px;
 }
 
 /* شرایط بازی */
 .game-rules {
-  max-width: 600px;
-  margin: 60px auto;
-  padding: 30px;
+  max-width: 90%;
+  margin: 40px auto;
+  padding: 20px;
   background: #f1e9df;
-  border-radius: 14px;
-  box-shadow: 0 6px 20px rgba(94, 41, 25, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(94, 41, 25, 0.2);
   text-align: center;
 }
 
 .game-rules h2 {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   font-weight: 900;
-  font-size: 1.9rem;
+  font-size: 1.7rem;
   color: #5e2919;
 }
 
 .game-rules ul {
   list-style: disc inside;
-  margin-bottom: 25px;
-  padding-right: 10px;
+  margin-bottom: 20px;
+  padding-right: 8px;
   text-align: right;
 }
 
 .game-rules ul li {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #6a4a2d;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .game-rules button {
-  margin: 10px 6px;
-  padding: 10px 25px;
+  margin: 8px 5px;
+  padding: 8px 20px;
   font-size: 15px;
   border-radius: 8px;
 }
 
 /* بازی */
 .game {
-  max-width: 600px;
-  margin: 60px auto;
-  padding: 30px;
+  max-width: 90%;
+  margin: 40px auto;
+  padding: 20px;
   background: #f1e9df;
-  border-radius: 14px;
-  box-shadow: 0 6px 20px rgba(94, 41, 25, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(94, 41, 25, 0.2);
   text-align: center;
 }
 
 .game h2 {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   font-weight: 900;
-  font-size: 1.9rem;
+  font-size: 1.7rem;
   color: #5e2919;
 }
 
 .game p {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: #6a4a2d;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .game ul {
   list-style: none;
-  margin-bottom: 25px;
-  padding-right: 10px;
+  margin-bottom: 20px;
+  padding-right: 8px;
 }
 
 .game ul li {
-  margin-bottom: 15px;
-  font-size: 1.1rem;
+  margin-bottom: 12px;
+  font-size: 1rem;
   font-weight: 600;
   color: #6a4a2d;
   cursor: pointer;
@@ -518,164 +515,164 @@ h1 {
 .game ul li label {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   justify-content: flex-end;
-  padding: 10px 15px;
-  border-radius: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
   transition: background 0.3s ease;
 }
 
-.game ul li label:hover,
+.game ul li label:hover:not(:disabled),
 .game ul li input[type="radio"]:checked + label {
   background: #d9cbbf;
-  box-shadow: 0 2px 8px rgba(94, 41, 25, 0.2);
+  box-shadow: 0 2px 6px rgba(94, 41, 25, 0.2);
 }
 
 .game ul li input[type="radio"] {
   cursor: pointer;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
 }
 
 .game button {
-  padding: 12px 35px;
+  padding: 10px 30px;
   font-size: 16px;
   font-weight: 700;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 /* نتیجه بازی */
 .game-result {
-  max-width: 600px;
-  margin: 60px auto;
-  padding: 30px;
+  max-width: 90%;
+  margin: 40px auto;
+  padding: 20px;
   background: #f1e9df;
-  border-radius: 14px;
-  box-shadow: 0 6px 20px rgba(94, 41, 25, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(94, 41, 25, 0.2);
   text-align: center;
 }
 
 .game-result h2 {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   font-weight: 900;
-  font-size: 1.9rem;
+  font-size: 1.7rem;
   color: #5e2919;
 }
 
 .game-result p {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: #6a4a2d;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .game-result p.discount {
   color: #28a745;
   font-weight: 700;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   background: #e6ffed;
-  padding: 10px;
+  padding: 8px;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+  box-shadow: 0 2px 6px rgba(40, 167, 69, 0.2);
   animation: pulse 1.5s infinite;
 }
 
 @keyframes pulse {
   0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  50% { transform: scale(1.03); }
   100% { transform: scale(1); }
 }
 
 .game-result button {
-  margin: 10px 6px;
-  padding: 10px 25px;
+  margin: 8px 5px;
+  padding: 8px 20px;
   font-size: 15px;
   border-radius: 8px;
 }
 
 /* پنل مدیریت */
 .admin-panel {
-  max-width: 900px;
-  margin: 30px auto 60px;
+  max-width: 90%;
+  margin: 30px auto;
   background: #f9f6f2;
-  border-radius: 14px;
-  padding: 30px;
-  box-shadow: 0 6px 20px rgba(94, 41, 25, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(94, 41, 25, 0.2);
   color: #5e2919;
 }
 
 .admin-panel h2 {
   text-align: center;
-  margin-bottom: 25px;
-  font-size: 1.9rem;
+  margin-bottom: 20px;
+  font-size: 1.7rem;
   font-weight: 900;
 }
 
 .orders-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin-bottom: 30px;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
 .order-admin-item {
   background: #f1e9df;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 3px 10px rgba(94, 41, 25, 0.15);
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(94, 41, 25, 0.15);
 }
 
 .order-admin-item h3 {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   font-weight: 700;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   color: #5e2919;
 }
 
 .order-admin-item p {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .order-admin-item ul {
   list-style: disc inside;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   color: #6a4a2d;
   font-weight: 500;
-  padding-right: 10px;
+  padding-right: 8px;
 }
 
 .order-admin-item ul li {
-  padding: 5px 0;
+  padding: 4px 0;
   font-size: 1rem;
 }
 
 .order-admin-item button {
-  margin-right: 12px;
-  padding: 8px 16px;
+  margin-right: 10px;
+  padding: 8px 14px;
   font-size: 14px;
   background: #28a745;
   border-radius: 8px;
   transition: background 0.3s ease;
 }
 
-.order-admin-item button:hover {
+.order-admin-item button:hover:not(:disabled) {
   background: #218838;
 }
 
 .chart-container {
-  max-width: 700px;
-  margin: 30px auto 40px;
+  max-width: 100%;
+  margin: 20px auto;
   background: #fff;
-  padding: 20px;
-  border-radius: 14px;
-  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .admin-panel > button {
-  margin: 10px 6px;
-  padding: 10px 25px;
+  margin: 8px 5px;
+  padding: 8px 20px;
   font-size: 15px;
   border-radius: 8px;
 }
@@ -696,33 +693,32 @@ h1 {
 
 .flavor-selector-modal > div {
   background: #f9f6f2;
-  padding: 30px 40px;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(50, 30, 10, 0.4);
-  max-width: 90%;
-  min-width: 300px;
-  width: 380px;
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(50, 30, 10, 0.4);
+  max-width: 85%;
+  min-width: 260px;
   text-align: center;
 }
 
 .flavor-selector-modal h3 {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   font-weight: 900;
   color: #5e2919;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 }
 
 .flavor-selector-modal ul {
   list-style: none;
-  margin-bottom: 25px;
-  max-height: 200px;
+  margin-bottom: 20px;
+  max-height: 180px;
   overflow-y: auto;
-  padding-right: 10px;
+  padding-right: 8px;
 }
 
 .flavor-selector-modal ul li {
-  margin-bottom: 12px;
-  font-size: 1.1rem;
+  margin-bottom: 10px;
+  font-size: 1rem;
   font-weight: 600;
   color: #6a4a2d;
   cursor: pointer;
@@ -733,65 +729,65 @@ h1 {
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   justify-content: flex-end;
-  padding: 8px 12px;
+  padding: 8px 10px;
   border-radius: 8px;
   transition: background 0.3s ease;
 }
 
-.flavor-selector-modal label:hover {
+.flavor-selector-modal label:hover:not(:disabled) {
   background: #d9cbbf;
 }
 
 .flavor-selector-modal input[type="radio"] {
   cursor: pointer;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
 }
 
 .flavor-selector-modal button {
-  margin: 0 6px;
-  padding: 10px 20px;
+  margin: 0 5px;
+  padding: 8px 18px;
   border-radius: 8px;
 }
 
 /* دکمه فلش به سمت پایین */
 .go-to-order {
   position: fixed;
-  bottom: 25px;
-  right: 25px;
+  bottom: 20px;
+  right: 20px;
   background: linear-gradient(135deg, #5e2919 0%, #7c3f24 100%);
   color: #fff;
   border: none;
   border-radius: 50%;
-  width: 55px;
-  height: 55px;
+  width: 50px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  box-shadow: 0 5px 15px rgba(94, 41, 25, 0.4);
+  box-shadow: 0 4px 12px rgba(94, 41, 25, 0.4);
   z-index: 1000;
-  font-size: 26px;
+  font-size: 24px;
   transition: all 0.3s ease;
 }
 
-.go-to-order:hover {
+.go-to-order:hover:not(:disabled) {
   background: linear-gradient(135deg, #7c3f24 0%, #9b5432 100%);
   transform: scale(1.1);
 }
 
 /* تایمر بازی */
 .timer-container {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .timer-bar {
   width: 100%;
-  height: 12px;
+  height: 10px;
   background: #e0e0e0;
-  border-radius: 6px;
+  border-radius: 5px;
   overflow: hidden;
 }
 
@@ -808,170 +804,111 @@ h1 {
 
 @keyframes shake {
   0% { transform: translateX(0); }
-  25% { transform: translateX(-3px); }
-  50% { transform: translateX(3px); }
-  75% { transform: translateX(-3px); }
+  25% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
+  75% { transform: translateX(-2px); }
   100% { transform: translateX(0); }
 }
 
-/* پاسخگویی */
+/* پاسخگویی برای موبایل */
 @media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
   .menu {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .menu-item {
-    height: 380px;
+    height: 350px;
+    padding: 12px;
   }
 
   .menu-item img {
-    height: 170px;
+    height: 150px;
   }
 
-  .admin-panel {
-    padding: 20px;
-  }
-
-  .admin-panel h2 {
-    font-size: 1.7rem;
-  }
-
-  .order-admin-item h3 {
-    font-size: 1.2rem;
-  }
-
-  .order-admin-item p {
-    font-size: 1rem;
-  }
-
-  .order-admin-item ul li {
-    font-size: 0.95rem;
-  }
-
-  .order-admin-item button {
-    padding: 7px 14px;
-    font-size: 13px;
-  }
-
-  .chart-container {
-    max-width: 100%;
-    padding: 15px;
-  }
-
-  .flavor-selector-modal > div {
-    padding: 25px;
-    min-width: 280px;
-  }
-
-  .go-to-order {
-    width: 50px;
-    height: 50px;
-    font-size: 22px;
-    bottom: 20px;
-    right: 20px;
-  }
-
-  .dashboard,
-  .game,
-  .game-rules,
-  .game-result {
-    margin: 40px auto;
-    padding: 25px;
-  }
-
-  .dashboard h2,
-  .game h2,
-  .game-rules h2,
-  .game-result h2 {
-    font-size: 1.7rem;
-  }
-
-  .dashboard .discount-info,
-  .game p,
-  .game-rules ul li,
-  .game-result p {
+  .menu-item h3 {
     font-size: 1.1rem;
   }
 
-  .dashboard .discount-card p {
-    font-size: 1rem;
-  }
-
-  .game ul li,
-  .dashboard .discount-cards {
-    font-size: 1rem;
-  }
-
-  .game ul li label {
-    padding: 8px 12px;
-  }
-
-  .game button,
-  .game-rules button,
-  .game-result button {
-    padding: 10px 25px;
-    font-size: 14px;
-  }
-
-  .login-panel button {
-    margin: 0 4px;
-    padding: 8px 18px;
+  .menu-item p {
+    font-size: 0.95rem;
   }
 
   .error-text, .loading-text {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     padding: 10px 15px;
+    max-width: 95%;
   }
-}
 
-@media (max-width: 480px) {
+  .pages-button {
+    gap: 10px;
+  }
+
+  .pages-button button {
+    padding: 8px 20px;
+    font-size: 15px;
+  }
+
   h1 {
-    font-size: 2.2rem;
+    font-size: 2rem;
+  }
+
+  .category-buttons {
+    gap: 8px;
+  }
+
+  .category-buttons button {
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+
+  .order {
+    padding: 15px;
   }
 
   .order h2 {
-    font-size: 1.7rem;
+    font-size: 1.6rem;
   }
 
   .order ul li {
-    font-size: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .order .total-price {
+    font-size: 1.1rem;
   }
 
   .order input[type="number"] {
-    padding: 10px 12px;
-    font-size: 14px;
+    padding: 8px 10px;
+    font-size: 15px;
   }
 
   .order > button {
-    padding: 10px 30px;
-    font-size: 14px;
+    padding: 8px 25px;
+    font-size: 15px;
   }
 
   .login-panel {
-    padding: 25px;
-    margin: 40px auto;
+    padding: 15px;
+    margin: 30px auto;
   }
 
   .login-panel h2 {
-    font-size: 1.7rem;
+    font-size: 1.6rem;
   }
 
   .login-panel input {
-    padding: 10px 12px;
-    font-size: 14px;
+    padding: 8px 10px;
+    font-size: 15px;
   }
 
   .login-panel button {
-    margin: 0 3px;
     padding: 8px 16px;
-  }
-
-  .go-to-order {
-    width: 45px;
-    height: 45px;
-    font-size: 20px;
-    bottom: 15px;
-    right: 15px;
+    font-size: 14px;
   }
 
   .dashboard,
@@ -979,7 +916,186 @@ h1 {
   .game-rules,
   .game-result {
     margin: 30px auto;
-    padding: 20px;
+    padding: 15px;
+  }
+
+  .dashboard h2,
+  .game h2,
+  .game-rules h2,
+  .game-result h2 {
+    font-size: 1.6rem;
+  }
+
+  .dashboard .discount-info,
+  .game p,
+  .game-rules ul li,
+  .game-result p {
+    font-size: 0.95rem;
+  }
+
+  .dashboard .discount-card p {
+    font-size: 0.9rem;
+  }
+
+  .game ul li,
+  .dashboard .discount-cards {
+    font-size: 0.9rem;
+  }
+
+  .game ul li label {
+    padding: 6px 8px;
+  }
+
+  .game button,
+  .game-rules button,
+  .game-result button {
+    padding: 8px 20px;
+    font-size: 14px;
+  }
+
+  .admin-panel {
+    padding: 15px;
+  }
+
+  .admin-panel h2 {
+    font-size: 1.6rem;
+  }
+
+  .order-admin-item h3 {
+    font-size: 1.1rem;
+  }
+
+  .order-admin-item p {
+    font-size: 0.95rem;
+  }
+
+  .order-admin-item ul li {
+    font-size: 0.9rem;
+  }
+
+  .order-admin-item button {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .chart-container {
+    padding: 10px;
+  }
+
+  .flavor-selector-modal > div {
+    padding: 15px 20px;
+    min-width: 240px;
+    max-width: 90%;
+  }
+
+  .flavor-selector-modal h3 {
+    font-size: 1.3rem;
+  }
+
+  .flavor-selector-modal ul li {
+    font-size: 0.95rem;
+  }
+
+  .go-to-order {
+    width: 45px;
+    height: 45px;
+    font-size: 22px;
+    bottom: 15px;
+    right: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 8px;
+  }
+
+  .menu-item {
+    height: 320px;
+  }
+
+  .menu-item img {
+    height: 130px;
+  }
+
+  .menu-item h3 {
+    font-size: 1rem;
+  }
+
+  .menu-item p {
+    font-size: 0.9rem;
+  }
+
+  .error-text, .loading-text {
+    font-size: 0.85rem;
+    padding: 8px 12px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .category-buttons button {
+    padding: 7px 12px;
+    font-size: 13px;
+  }
+
+  .pages-button button {
+    padding: 7px 18px;
+    font-size: 14px;
+  }
+
+  .order {
+    padding: 12px;
+  }
+
+  .order h2 {
+    font-size: 1.5rem;
+  }
+
+  .order ul li {
+    font-size: 0.9rem;
+  }
+
+  .order .total-price {
+    font-size: 1rem;
+  }
+
+  .order input[type="number"] {
+    padding: 7px 8px;
+    font-size: 14px;
+  }
+
+  .order > button {
+    padding: 7px 20px;
+    font-size: 14px;
+  }
+
+  .login-panel {
+    padding: 12px;
+    margin: 20px auto;
+  }
+
+  .login-panel h2 {
+    font-size: 1.5rem;
+  }
+
+  .login-panel input {
+    padding: 7px 8px;
+    font-size: 14px;
+  }
+
+  .login-panel button {
+    padding: 7px 14px;
+    font-size: 13px;
+  }
+
+  .dashboard,
+  .game,
+  .game-rules,
+  .game-result {
+    margin: 20px auto;
+    padding: 12px;
   }
 
   .dashboard h2,
@@ -993,39 +1109,76 @@ h1 {
   .game p,
   .game-rules ul li,
   .game-result p {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   .dashboard .discount-card p {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
   }
 
   .game ul li,
   .dashboard .discount-cards {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
   }
 
   .game ul li label {
-    padding: 6px 10px;
+    padding: 5px 7px;
   }
 
   .game button,
   .game-rules button,
   .game-result button {
-    padding: 8px 20px;
+    padding: 7px 18px;
     font-size: 13px;
   }
 
-  .menu-item {
-    height: 360px;
+  .admin-panel {
+    padding: 12px;
   }
 
-  .menu-item img {
-    height: 140px;
+  .admin-panel h2 {
+    font-size: 1.5rem;
   }
 
-  .error-text, .loading-text {
+  .order-admin-item h3 {
+    font-size: 1rem;
+  }
+
+  .order-admin-item p {
     font-size: 0.9rem;
-    padding: 8px 12px;
+  }
+
+  .order-admin-item ul li {
+    font-size: 0.85rem;
+  }
+
+  .order-admin-item button {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .chart-container {
+    padding: 8px;
+  }
+
+  .flavor-selector-modal > div {
+    padding: 12px 15px;
+    min-width: 220px;
+  }
+
+  .flavor-selector-modal h3 {
+    font-size: 1.2rem;
+  }
+
+  .flavor-selector-modal ul li {
+    font-size: 0.9rem;
+  }
+
+  .go-to-order {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    bottom: 10px;
+    right: 10px;
   }
 }
