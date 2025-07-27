@@ -1,0 +1,950 @@
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import axios from "axios";
+import questions from "./questions.json";
+import "./App.css";
+
+ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+
+const API_URL = "/api";
+
+const categorizedMenu = {
+  "نوشیدنی‌های گرم": [
+    { id: 1, name: "سرویس چای دونفره", price: 100000, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFftmc4FYop2a0r77DCRtjHZO7-nJOddA9cQ&s" },
+    { id: 2, name: "چای لیوانی", price: 40000, image: "https://encrypted-tbn0.gstatic.com/images?q=Tfn18LslkGNKUvwdRVWW7bNCQwsJANsbKl-XMpMFKf8UILu0WpNjmr3zJkIJMY0CaQgmyqU" },
+    { id: 3, name: "چای دارچین و عسل", price: 140000, image: "https://salamatim.com/wp-content/uploads/2021/04/Health-Benefits-Of-Cinnamon-Tea2.jpg" },
+    { id: 4, name: "چای ماسالا", price: 130000, image: "https://encrypted-tbn0.gstatic.com/images?q=Tfn18LslkGNKUvwdRVWW7bNCQwsJANsbKl-XMpMFKf8UILu0WpNjmr3zJkIJMY0CaQgmyqU" },
+    { id: 5, name: "قهوه لاته", price: 130000, image: "https://encrypted-tbn0.gstatic.com/images?q=TnQ4C8mfe802YD8wt2_AZrVWQyhZXbYWQAK5kQ" },
+    { id: 6, name: "قهوه اسپرسو", price: 60000, image: "https://espresso-market.com/wp-content/uploads/2024/08/unnamed-1.jpg" },
+    { id: 7, name: "قهوه ترک", price: 65000, image: "https://magreeze.net/wp-content/uploads/2022/05/Turkish-Coffee.jpg" },
+    { id: 8, name: "آفوگاتو", price: 135000, image: "https://images.pexels.com/photos/14704659/pexels-photo-14704659.jpeg" },
+    { id: 9, name: "هات چاکلت", price: 130000, image: "https://www.cocoterra.com/wp-content/uploads/belgian-hot-chocolate-recipe-drink.jpg" },
+    { id: 10, name: "نسکافه گلد", price: 110000, image: "https://images.pexels.com/photos/10990310/pexels-photo-10990310.jpeg" },
+    { id: 11, name: "شیرنسکافه", price: 135000, image: "https://encrypted-tbn0.gstatic.com/images?q=QnQ2BsC0BuB6hN-aSnhLt_aQ8Vm-Dghk5-LuQOo3bGLZL-H8IWh5C3m89lb7AkLBBcSCbtY" },
+  ],
+  "نوشیدنی‌های سرد": [
+    { id: 12, name: "کافه گلاسه", price: 190000, image: "https://zarinbano.com/wp-content/uploads/%D8%B7%D8%B1%D8%B2-%D8%AA%D9%87%DB%8C%D9%87-%DA%A9%D8%A7%D9%81%D9%87-%DA%AF%D9%84%D8%A7%D8%B3%D9%87.jpg" },
+    { id: 13, name: "طالبی گلاسه", price: 190000, image: "https://asrturkiye.com/wp-content/uploads/2025/06/15-34.webp" },
+    { id: 14, name: "شکلات گلاسه", price: 190000, image: "https://encrypted-tbn0.gstatic.com/images?q=QKUkMjHsqXdFjJaxesWj5FNDuVhkunfS1WdT0D46QzsbJ9DcYb5BIJLBTsA4yWaWJAidM" },
+    { id: 15, name: "آیس اسپرسو", price: 120000, image: "https://encrypted-tbn0.gstatic.com/images?q=Qeoq5wIcNuaaGGxyOcquH7ekh0QMVQeXVErQ" },
+    { id: 16, name: "بستنی", price: 140000, image: "https://encrypted-tbn0.gstatic.com/images?q=SmZJNX_fkUaSl09wAJajnITcgNyxA1HySdZ1dNdrcWPfvG3Q_FnSztSM5ON9TODB-j4ck" },
+    { id: 17, name: "شیرموز", price: 155000, image: "https://encrypted-tbn0.gstatic.com/images?q=TcWGwgkiCEtEUCKMXekKhsEWYfyxCw4IlQqw" },
+    { id: 18, name: "آب هویج", price: 135000, image: "https://vaziri-ind.ir/wp-content/uploads/2022/02/%D8%AE%D8%A7%D8%B5%DB%8C%D8%AA-%D8%A7%D8%A8-%D9%87%D9%88%DB%8C%D8%AC-%D8%A8%D8%B1%D8%A7%DB%8C-%D9%BE%D9%88%D8%B3%D8%AA.jpg" },
+    { id: 19, name: "آب طالبی", price: 135000, image: "https://mag.delta.ir/wp-content/uploads/2024/04/Milkshake-.jpg" },
+    { id: 20, name: "آب پرتقال", price: 135000, image: "https://files.namnak.com/bi/users/nh/aup/202102/908_pics/%D8%AE%D9%88%D8%A7%D8%B5-%D8%A2%D8%A8-%D9%BE%D8%B1%D8%AA%D9%82%D8%A7%D9%84.webp" },
+    { id: 21, name: "آب هویج بستنی", price: 160000, image: "https://encrypted-tbn0.gstatic.com/images?q=SvuCdtbchLtktWN1pvNFnSQ6MWs-69oPNF3w" },
+    { id: 22, name: "آّب طالبی بستنی", price: 160000, image: "https://iranipokht.ir/wp-content/uploads/2025/05/how-to-prepare-cantaloupe-juice-ice-cream-logo-1.jpg" },
+    { id: 23, name: "موهیتو", price: 155000, image: "https://foodculture.ir/wp-content/uploads/2018/04/mojito-1300x867.jpg" },
+  ],
+  "کیک ها": [
+    { id: 24, name: "کیک شکلاتی", price: 120000, image: "https://rang-rangi.ir/images/1280/cake-khis.jpg" },
+    { id: 25, name: "کیک روز", price: 140000, image: "https://zino.cafe/wp-content/uploads/2020/12/%DA%A9%DB%8C%DA%A9-%D8%B1%D9%88%D8%B2.jpg" },
+    { id: 26, name: "کبک بستنی", price: 150000, image: "https://blog.okala.com/wp-content/uploads/2020/07/Ice-cream-cake-00.jpg" },
+    { id: 27, name: "پنکیک نوتلا", price: 165000, image: "https://encrypted-tbn0.gstatic.com/images?q=RQl9fdlCxbnqjm7Mu6LlZsKwFdb3LyDuLnTQ" },
+  ],
+  "انواع شیک": [
+    { id: 28, name: "شیک نوتلا", price: 190000, image: "https://encrypted-tbn0.gstatic.com/images?q=Ryhkyxa2pyc_X4a0ZFiE9dXBegPyC_eOEZ_A" },
+    { id: 29, name: "شیک شکلاتی", price: 170000, image: "https://saas-behtarino.hs3.ir/media/business_products_images/7ddfe124-4a5c-4ed1-9b7f-065f7625723b.jpg" },
+    { id: 30, name: "شیک موز شکلات", price: 185000, image: "https://blog.okcs.com/wp-content/uploads/2023/05/Healthy-Banana-Chocolate-Smoothie-720x720-1.jpg" },
+    { id: 31, name: "شیک شکلات نسکافه", price: 185000, image: "https://ashpazsho.ir/wp-content/uploads/2021/04/milkshake-chocolate.webp" },
+    { id: 32, name: "شیک انبه", price: 200000, image: "https://darnahayat.ir/wp-content/uploads/2022/07/milkshake-anbe.jpg" },
+    { id: 33, name: "شیک کیت کت", price: 190000, image: "https://encrypted-tbn0.gstatic.com/images?q=T0FNhYG20AGf7OOfsV2oEiDVJ0uwHYB-TM4M7C1bl_FSLt4fborUCUx9_MewHWHG3e87c" },
+    { id: 34, name: "شیک توت فرنگی", price: 200000, image: "https://encrypted-tbn0.gstatic.com/images?q=Sl52jpoVHF2oEsxWkxZS_BSDI3Ipof2R2sFA" },
+    { id: 35, name: "شیک بادام زمینی", price: 180000, image: "https://blog.okcs.com/wp-content/uploads/2023/06/Peanut-butter-milkshake-recipe.jpg" },
+    { id: 36, name: "شیک قهوه", price: 175000, image: "https://hshtpa.ir/wp-content/uploads/2022/08/%D8%B4%DB%8C%DA%A9-%D9%82%D9%87%D9%88%D9%87-%D8%AE%D8%A7%D9%86%DA%AF%DB%8C.jpg" },
+  ],
+  "دمنوش ها": [
+    { id: 37, name: "گل گاو زبان", price: 120000, image: "https://blog.okala.com/wp-content/uploads/2024/12/Vipers-buglosses-and-saffron-tea2.jpg" },
+    { id: 38, name: "چای ترش", price: 120000, image: "https://www.ghafaridiet.com/upload/article/1671258853.jpg" },
+    { id: 39, name: "چای سبز", price: 120000, image: "https://drjafargholi.com/wp-content/uploads/2021/01/green-tea-properties.jpg" },
+    { id: 40, name: "دمنوش آرامش", price: 120000, image: "https://iranvegstore.com/wp-content/uploads/2022/10/%D8%A8%D9%87%D8%AA%D8%B1%DB%8C%D9%86-%D8%AF%D9%85%D9%86%D9%88%D8%B4-%D8%B2%D9%85%D8%B3%D8%AA%D8%A7%D9%86.jpg" },
+    { id: 41, name: "دمنوش سلامت", price: 120000, image: "https://mugestan.com/mag/wp-content/uploads/2022/11/%D8%AF%D9%85%D9%86%D9%88%D8%B4-%D9%85%D9%81%DB%8C%D8%AF13.jpg" },
+  ],
+  "غذا ها": [
+    { id: 42, name: "پاستا دورهمی", price: 290000, image: "https://panamag.ir/wp-content/uploads/2023/05/pasta-sabzijat.jpg" },
+    { id: 43, name: "سالاد دورهمی", price: 280000, image: "https://noyanrestaurant.ir/media/k2/items/cache/c82cc4e14a1d2c8c8ffff9840d24b558_XL.jpg?t=20241006_170018" },
+    { id: 44, name: "سالاد رژیمی", price: 360000, image: "https://limoome.com/blog/wp-content/uploads/2023/06/Salad-3.jpg" },
+    { id: 45, name: "سیب زمینی با سس قارچ", price: 220000, image: "https://hashtiha.com/wp-content/uploads/2025/05/%D8%B7%D8%B1%D8%B2-%D8%AA%D9%87%DB%8C%D9%87-%D8%B3%DB%8C%D8%A8-%D8%B2%D9%85%DB%8C%D9%86%DB%8C-%D8%A8%D8%A7-%D8%B3%D8%B3-%D9%82%D8%A7%D8%B1%DA%86.jpg" },
+    { id: 46, name: "سیب زمینی سرخ شده", price: 150000, image: "https://chishi.ir/wp-content/uploads/2020/05/sibzamini-sorkh-karde.jpg" },
+    { id: 47, name: "فیله سوخاری سه تیکه", price: 380000, image: "https://static.delino.com/Image/Restaurant/Food/z3v0hfla.dgh_560x350.jpg" },
+    { id: 48, name: "اسپاگتی با مرغ گریل", price: 330000, image: "https://cdn.rokna.net/thumbnail/3R3qtQSwINl2/4AWGqs3C3zj1VoMP2nMyyYaJhBmE6YiWGA6feRzhrZzE_cqDIHOPkq-1-4nX83BW/%D9%BE%D8%A7%D8%B3%D8%AA%D8%A7+%D8%A2%D9%84%D9%81%D8%B1%D8%AF%D9%88.jpg" },
+    { id: 49, name: "املت", price: 140000, image: "https://panamag.ir/wp-content/uploads/2021/09/omlet-robi.jpg" },
+    { id: 50, name: "چیپس و پنیر", price: 220000, image: "https://noktechi.ir/wp-content/uploads/2022/04/hot-chips.jpg" },
+    { id: 51, name: "اسنک", price: 180000, image: "https://server01.farsibeauty.com/public/articles/cover/2022/7/md/809c2f28-3621-452d-84fa-aede0008bc2a-%D8%A7%D8%B3%D9%86%DA%A9-%D9%85%D8%B1%D8%BA.jpg" },
+    { id: 52, name: "همبرگر مخصوص", price: 420000, image: "https://www.alamto.com/wp-content/uploads/2022/07/d5vv-hero-scaled.webp" },
+    { id: 53, name: "قارچ سوخاری", price: 250000, image: "https://jadvalyab.ir/blog/wp-content/uploads/2022/10/unnamed.jpg" },
+  ],
+  "قلیون": [
+    { id: 54, name: "قلیون با سرویس ساده", price: 120000, image: "https://s3.dana.ir/dana/uploads/01/06/1399/1639418.jpg" },
+    { id: 55, name: "قلیون با سرویس ویژه", price: 200000, image: "https://www.wikiravan.com/wp-content/uploads/2019/09/%D9%82%D9%84%DB%8C%D8%A7%D9%86-%DA%A9%D8%B4%DB%8C%D8%AF%D9%86.jpg" },
+  ],
+};
+
+const hookahFlavors = ["دو سیب", "لیمو", "پرتقال نعنا", "لیمو نعنا", "نعنایی", "مخصوص دورهمی"];
+
+function App() {
+  const [selectedCategory, setSelectedCategory] = useState("نوشیدنی‌های گرم");
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [tableNumber, setTableNumber] = useState("");
+  const [page, setPage] = useState("order");
+  const [orders, setOrders] = useState([]);
+  const [weeklyRevenue, setWeeklyRevenue] = useState({ id: 1, total: 0, daily: Array(7).fill(0) });
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [userName, setUserName] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [adminPassword, setAdminPassword] = useState("");
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [showFlavorSelector, setShowFlavorSelector] = useState(false);
+  const [pendingItem, setPendingItem] = useState(null);
+  const [selectedFlavor, setSelectedFlavor] = useState("");
+  const [ratings, setRatings] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const orderSectionRef = useRef(null);
+
+  // Game State
+  const [gameState, setGameState] = useState({
+    currentQuestionIndex: 0,
+    score: 0,
+    questions: [],
+    selectedAnswer: null,
+    timeLeft: 15,
+  });
+  const [discounts, setDiscounts] = useState([]);
+
+  // Fetch Initial Data
+  const fetchOrders = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await axios.get(`${API_URL}/orders`);
+      setOrders(res.data || []);
+    } catch (err) {
+      setError("خطا در دریافت سفارش‌ها: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const fetchRevenue = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await axios.get(`${API_URL}/weeklyRevenue/1`);
+      setWeeklyRevenue(res.data || { id: 1, total: 0, daily: Array(7).fill(0) });
+    } catch (err) {
+      setError("خطا در دریافت درآمد: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const fetchDiscounts = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await axios.get(`${API_URL}/discounts`);
+      const now = Date.now();
+      const oneDay = 24 * 60 * 60 * 1000;
+      const validDiscounts = res.data.filter(d => now - d.timestamp < oneDay);
+      setDiscounts(validDiscounts);
+    } catch (err) {
+      setError("خطا در دریافت تخفیف‌ها: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchOrders();
+    fetchRevenue();
+    fetchDiscounts();
+  }, [fetchOrders, fetchRevenue, fetchDiscounts]);
+
+  // Timer for Game
+  useEffect(() => {
+    if (page === "game" && gameState.timeLeft > 0) {
+      const timer = setInterval(() => {
+        setGameState(prev => {
+          if (prev.timeLeft <= 1) {
+            handleNextQuestion();
+            return { ...prev, timeLeft: 15 };
+          }
+          return { ...prev, timeLeft: prev.timeLeft - 1 };
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [page, gameState.timeLeft]);
+
+  // Reset Timer on Question Change
+  useEffect(() => {
+    if (page === "game") {
+      setGameState(prev => ({ ...prev, timeLeft: 15 }));
+    }
+  }, [gameState.currentQuestionIndex, page]);
+
+  // Validate Phone Number
+  const validatePhoneNumber = useCallback(phone => /^09\d{9}$/.test(phone), []);
+
+  // Register User
+  const handleRegister = useCallback(async () => {
+    if (!validatePhoneNumber(phoneNumber)) {
+      setError("لطفاً شماره موبایل معتبر (11 رقمی با شروع 09) وارد کنید.");
+      return;
+    }
+    if (phoneNumber === "09901295140") {
+      setError("این شماره مختص مدیر کافه است و نمی‌تواند ثبت‌نام کند.");
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await axios.get(`${API_URL}/users?phoneNumber=${phoneNumber}`);
+      if (res.data.length > 0) {
+        setError("این شماره موبایل قبلاً ثبت شده است.");
+        return;
+      }
+      const newUser = { phoneNumber, name: userName || "", id: Date.now().toString() };
+      await axios.post(`${API_URL}/users`, newUser);
+      setCurrentUser(newUser);
+      setIsLoggedIn(true);
+      setPage("dashboard");
+      setPhoneNumber("");
+      setUserName("");
+      setError("ثبت‌نام با موفقیت انجام شد.");
+    } catch (err) {
+      setError("خطا در ثبت‌نام: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [phoneNumber, userName, validatePhoneNumber]);
+
+  // Login User
+  const handleLogin = useCallback(async () => {
+    if (!validatePhoneNumber(phoneNumber)) {
+      setError("لطفاً شماره موبایل معتبر (11 رقمی با شروع 09) وارد کنید.");
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await axios.get(`${API_URL}/users?phoneNumber=${phoneNumber}`);
+      if (phoneNumber === "09901295140") {
+        setShowAdminLogin(true);
+        return;
+      }
+      if (res.data.length === 0) {
+        setError("این شماره موبایل ثبت‌نام نشده است. لطفاً ثبت‌نام کنید.");
+        return;
+      }
+      setCurrentUser(res.data[0]);
+      setIsLoggedIn(true);
+      setPage("dashboard");
+      setPhoneNumber("");
+      setError("ورود با موفقیت انجام شد.");
+    } catch (err) {
+      setError("خطا در ورود: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [phoneNumber, validatePhoneNumber]);
+
+  // Admin Login
+  const handleAdminLogin = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await axios.post(`${API_URL}/admin-login`, { password: adminPassword });
+      if (res.data.success) {
+        setCurrentUser({ phoneNumber: "09901295140", name: "مدیر", id: "admin" });
+        setIsLoggedIn(true);
+        setPage("admin");
+        setAdminPassword("");
+        setShowAdminLogin(false);
+        setError("ورود مدیر با موفقیت انجام شد.");
+      } else {
+        setError("رمز عبور اشتباه است.");
+      }
+    } catch (err) {
+      setError("خطا در ورود مدیر: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [adminPassword]);
+
+  // Game Functions
+  const showGameRules = () => setPage("gameRules");
+
+  const startGame = () => {
+    const shuffledQuestions = [...questions].sort(() => Math.random() - 0.5).slice(0, 10);
+    setGameState({
+      currentQuestionIndex: 0,
+      score: 0,
+      questions: shuffledQuestions,
+      selectedAnswer: null,
+      timeLeft: 15,
+    });
+    setPage("game");
+  };
+
+  const handleAnswerSelect = answer => {
+    setGameState(prev => ({ ...prev, selectedAnswer: answer }));
+  };
+
+  const handleNextQuestion = useCallback(async () => {
+    const { selectedAnswer, questions, currentQuestionIndex, score } = gameState;
+    let newScore = score;
+    if (selectedAnswer === questions[currentQuestionIndex].answer) {
+      newScore += 1;
+    }
+    if (currentQuestionIndex < 9) {
+      setGameState(prev => ({
+        ...prev,
+        currentQuestionIndex: currentQuestionIndex + 1,
+        selectedAnswer: null,
+        score: newScore,
+        timeLeft: 15,
+      }));
+    } else {
+      setGameState(prev => ({ ...prev, score: newScore }));
+      const finalScore = newScore;
+      if (finalScore >= 7 && currentUser) {
+        const now = Date.now();
+        const oneDay = 24 * 60 * 60 * 1000;
+        const lastDiscount = await axios.get(
+          `${API_URL}/discounts?userPhone=${currentUser.phoneNumber}&_sort=timestamp&_order=desc&_limit=1`
+        );
+        if (!lastDiscount.data.length || now - lastDiscount.data[0].timestamp > oneDay) {
+          let discountAmount = 0;
+          if (finalScore === 7) discountAmount = 15000;
+          else if (finalScore === 8) discountAmount = 20000;
+          else if (finalScore === 9) discountAmount = 25000;
+          else if (finalScore === 10) discountAmount = 30000;
+          if (discountAmount > 0) {
+            const discountCode = `DISCOUNT-${Date.now()}`;
+            const newDiscount = {
+              code: discountCode,
+              amount: discountAmount,
+              timestamp: now,
+              userPhone: currentUser.phoneNumber,
+              id: Date.now().toString(),
+            };
+            await axios.post(`${API_URL}/discounts`, newDiscount);
+            setDiscounts(prev => [
+              ...prev.filter(d => now - d.timestamp < oneDay),
+              newDiscount,
+            ]);
+          }
+        }
+      }
+      setPage("gameResult");
+    }
+  }, [gameState, currentUser]);
+
+  const getRemainingTime = timestamp => {
+    const now = Date.now();
+    const oneDay = 24 * 60 * 60 * 1000;
+    const remaining = oneDay - (now - timestamp);
+    if (remaining <= 0) return "منقضی شده";
+    const hours = Math.floor(remaining / (1000 * 60 * 60));
+    const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+    return `${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  // Order Functions
+  const handleItemClick = useCallback(
+    item => {
+      if (item.name.includes("قلیون")) {
+        setPendingItem(item);
+        setSelectedFlavor("");
+        setShowFlavorSelector(true);
+      } else {
+        addToOrder(item);
+      }
+    },
+    []
+  );
+
+  const addToOrder = useCallback(
+    item => {
+      setSelectedItems(prevItems => {
+        const existing = prevItems.find(
+          i => i.id === item.id && (item.flavor ? i.flavor === item.flavor : !i.flavor)
+        );
+        if (existing) {
+          return prevItems.map(i =>
+            i.id === item.id && (item.flavor ? i.flavor === item.flavor : !i.flavor)
+              ? { ...i, quantity: i.quantity + 1 }
+              : i
+          );
+        }
+        return [...prevItems, { ...item, quantity: 1 }];
+      });
+    },
+    []
+  );
+
+  const changeQuantity = useCallback(
+    (id, flavor, increment) => {
+      setSelectedItems(prevItems =>
+        prevItems
+          .map(item =>
+            item.id === id && (flavor ? item.flavor === flavor : !item.flavor)
+              ? { ...item, quantity: item.quantity + increment }
+              : item
+          )
+          .filter(item => item.quantity > 0)
+      );
+    },
+    []
+  );
+
+  const removeFromOrder = useCallback(
+    (id, flavor) => {
+      setSelectedItems(prevItems =>
+        prevItems.filter(item => !(item.id === id && (flavor ? item.flavor === flavor : !item.flavor)))
+      );
+    },
+    []
+  );
+
+  const submitOrder = useCallback(async () => {
+    if (!tableNumber) {
+      setError("لطفاً شماره میز را وارد کنید.");
+      return;
+    }
+    if (selectedItems.length === 0) {
+      setError("لطفاً آیتمی انتخاب کنید.");
+      return;
+    }
+    const newOrder = {
+      id: Date.now().toString(),
+      tableNumber,
+      items: selectedItems,
+      timestamp: Date.now(),
+      status: "pending",
+      total: selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    };
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await axios.post(`${API_URL}/orders`, newOrder);
+      setOrders(prev => [...prev, res.data]);
+      setSelectedItems([]);
+      setTableNumber("");
+      setError("سفارش با موفقیت ثبت شد!");
+    } catch (err) {
+      setError("خطا در ثبت سفارش: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [selectedItems, tableNumber]);
+
+  const confirmFlavorSelection = useCallback(() => {
+    if (!selectedFlavor) {
+      setError("لطفاً یک طعم انتخاب کنید.");
+      return;
+    }
+    addToOrder({ ...pendingItem, flavor: selectedFlavor });
+    setShowFlavorSelector(false);
+    setSelectedFlavor("");
+    setPendingItem(null);
+  }, [selectedFlavor, pendingItem, addToOrder]);
+
+  const markOrderAsCompleted = useCallback(
+    async orderId => {
+      setLoading(true);
+      setError(null);
+      try {
+        const order = orders.find(o => o.id === orderId);
+        if (!order) throw new Error("سفارش یافت نشد.");
+        const orderTotal = order.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const orderDate = new Date(order.timestamp);
+        const today = new Date();
+        const weekStart = new Date(today);
+        weekStart.setDate(today.getDate() - today.getDay());
+        if (orderDate >= weekStart && orderDate <= today) {
+          const dayIndex = orderDate.getDay();
+          const newDaily = [...weeklyRevenue.daily];
+          newDaily[dayIndex] = (newDaily[dayIndex] || 0) + orderTotal;
+          const newTotal = weeklyRevenue.total + orderTotal;
+          await axios.patch(`${API_URL}/weeklyRevenue/1`, {
+            total: newTotal,
+            daily: newDaily,
+          });
+          setWeeklyRevenue({ id: 1, total: newTotal, daily: newDaily });
+        }
+        await axios.delete(`${API_URL}/orders/${orderId}`);
+        setOrders(prev => prev.filter(o => o.id !== orderId));
+        setError("سفارش با موفقیت تایید شد.");
+      } catch (err) {
+        setError("خطا در تایید سفارش: " + err.message);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [orders, weeklyRevenue]
+  );
+
+  const resetWeeklyRevenue = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await axios.patch(`${API_URL}/weeklyRevenue/1`, {
+        total: 0,
+        daily: Array(7).fill(0),
+      });
+      setWeeklyRevenue({ id: 1, total: 0, daily: Array(7).fill(0) });
+      setError("درآمد هفتگی با موفقیت ریست شد.");
+    } catch (err) {
+      setError("خطا در ریست درآمد: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const scrollToOrder = () => {
+    orderSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const chartData = {
+    labels: ["یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه", "شنبه"],
+    datasets: [
+      {
+        label: "درآمد روزانه (تومان)",
+        data: weeklyRevenue.daily,
+        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    scales: {
+      y: { beginAtZero: true, title: { display: true, text: "درآمد (تومان)" } },
+      x: { title: { display: true, text: "روزهای هفته" } },
+    },
+    plugins: { legend: { display: true, position: "top" } },
+  };
+
+  return (
+    <div className="App">
+      {loading && <p className="loading-text">در حال بارگذاری...</p>}
+      {error && <p className="error-text">{error}</p>}
+
+      <nav className="pages-button">
+        <button onClick={() => setPage("order")} disabled={loading}>
+          سفارش
+        </button>
+        <button
+          onClick={() => setPage(isLoggedIn ? "dashboard" : "login")}
+          disabled={loading}
+        >
+          سرگرمی
+        </button>
+      </nav>
+
+      {showFlavorSelector && (
+        <div className="flavor-selector-modal">
+          <div>
+            <h3>لطفاً طعم قلیون را انتخاب کنید</h3>
+            <ul>
+              {hookahFlavors.map(flavor => (
+                <li key={flavor}>
+                  <label>
+                    <input
+                      type="radio"
+                      name="flavor"
+                      value={flavor}
+                      checked={selectedFlavor === flavor}
+                      onChange={() => setSelectedFlavor(flavor)}
+                      disabled={loading}
+                    />
+                    {flavor}
+                  </label>
+                </li>
+              ))}
+            </ul>
+            <button onClick={confirmFlavorSelection} disabled={loading}>
+              تایید
+            </button>
+            <button onClick={() => setShowFlavorSelector(false)} disabled={loading}>
+              لغو
+            </button>
+          </div>
+        </div>
+      )}
+
+      {page === "order" && (
+        <>
+          <h1 className="cafe-title">کافه دورهمی</h1>
+          <div className="category-buttons">
+            {Object.keys(categorizedMenu).map(category => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={selectedCategory === category ? "active" : ""}
+                disabled={loading}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+          <div className="menu">
+            {categorizedMenu[selectedCategory].map(item => {
+              const selectedItem = selectedItems.find(
+                i => i.id === item.id && (item.flavor ? i.flavor === item.flavor : !i.flavor)
+              );
+              return (
+                <div key={item.id} className="menu-item">
+                  <img
+                    src={item.image || "/images/default.jpg"}
+                    alt={item.name}
+                    style={{
+                      width: "100%",
+                      height: "200px",
+                      objectFit: "cover",
+                      borderRadius: "8px",
+                      marginBottom: "10px",
+                    }}
+                  />
+                  <h3>{item.name}</h3>
+                  <p>{item.price.toLocaleString()} تومان</p>
+                  <div className="stars">
+                    {[1, 2, 3, 4, 5].map(star => (
+                      <span
+                        key={star}
+                        onClick={() =>
+                          setRatings(prev => ({ ...prev, [item.id]: star }))
+                        }
+                        style={{
+                          color: (ratings[item.id] || 0) >= star ? "#f5c518" : "#ccc",
+                          cursor: "pointer",
+                        }}
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </div>
+                  {!selectedItem && (
+                    <button onClick={() => handleItemClick(item)} disabled={loading}>
+                      سفارش
+                    </button>
+                  )}
+                  {selectedItem && (
+                    <div className="quantity-control">
+                      <button
+                        onClick={() => changeQuantity(item.id, item.flavor, -1)}
+                        disabled={loading}
+                      >
+                        -
+                      </button>
+                      <span style={{ margin: "0 10px" }}>{selectedItem.quantity}</span>
+                      <button
+                        onClick={() => changeQuantity(item.id, item.flavor, 1)}
+                        disabled={loading}
+                      >
+                        +
+                      </button>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          <div className="order" ref={orderSectionRef}>
+            <h2>سفارش شما</h2>
+            {selectedItems.length > 0 ? (
+              <>
+                <ul>
+                  {selectedItems.map((item, index) => (
+                    <li key={index} className="order-item">
+                      <span>
+                        {item.name} {item.flavor ? `- طعم: ${item.flavor}` : ""} (تعداد: {item.quantity}) - {(item.price * item.quantity).toLocaleString()} تومان
+                      </span>
+                      <button
+                        className="remove-button"
+                        onClick={() => removeFromOrder(item.id, item.flavor)}
+                        disabled={loading}
+                      >
+                        ×
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <p className="total-price">
+                  جمع کل: {selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toLocaleString()} تومان
+                </p>
+                <input
+                  type="number"
+                  placeholder="شماره میز..."
+                  value={tableNumber}
+                  onChange={e => setTableNumber(e.target.value)}
+                  className="input-field"
+                  disabled={loading}
+                />
+                <button onClick={submitOrder} disabled={loading}>
+                  ثبت سفارش‌ها
+                </button>
+              </>
+            ) : (
+              <p>هیچ آیتمی انتخاب نشده است.</p>
+            )}
+          </div>
+          <button className="go-to-order" onClick={scrollToOrder} disabled={loading}>
+            ↓
+          </button>
+        </>
+      )}
+
+      {page === "login" && (
+        <div className="login-panel">
+          <h2>ورود / ثبت‌نام</h2>
+          <input
+            type="text"
+            placeholder="شماره موبایل (11 رقم)"
+            value={phoneNumber}
+            onChange={e => setPhoneNumber(e.target.value)}
+            className="input-field"
+            disabled={loading}
+          />
+          {showAdminLogin && phoneNumber === "09901295140" ? (
+            <>
+              <input
+                type="password"
+                placeholder="رمز عبور مدیر"
+                value={adminPassword}
+                onChange={e => setAdminPassword(e.target.value)}
+                className="input-field"
+                disabled={loading}
+              />
+              <button onClick={handleAdminLogin} disabled={loading}>
+                ورود مدیر
+              </button>
+            </>
+          ) : (
+            <>
+              <input
+                type="text"
+                placeholder="نام (اختیاری)"
+                value={userName}
+                onChange={e => setUserName(e.target.value)}
+                className="input-field"
+                disabled={loading}
+              />
+              <button onClick={handleRegister} disabled={loading}>
+                ثبت‌نام
+              </button>
+              <button onClick={handleLogin} disabled={loading}>
+                ورود
+              </button>
+            </>
+          )}
+        </div>
+      )}
+
+      {page === "dashboard" && isLoggedIn && (
+        <div className="dashboard">
+          <h2>{currentUser.name ? `خوش آمدی، ${currentUser.name}!` : "خوش آمدی!"}</h2>
+          <p className="discount-info">هر روز فقط از یک کد تخفیف می‌توانید استفاده کنید.</p>
+          <button onClick={showGameRules} disabled={loading}>
+            شروع بازی اطلاعات عمومی
+          </button>
+          <h3>کدهای تخفیف شما</h3>
+          {discounts.length > 0 ? (
+            <div className="discount-cards">
+              {discounts
+                .filter(d => d.userPhone === currentUser.phoneNumber)
+                .map((discount, index) => (
+                  <div
+                    key={index}
+                    className={`discount-card ${getRemainingTime(discount.timestamp) === "منقضی شده" ? "expired" : ""}`}
+                  >
+                    <p>کد: {discount.code}</p>
+                    <p>مبلغ: {discount.amount.toLocaleString()} تومان</p>
+                    <p>زمان باقی‌مانده: {getRemainingTime(discount.timestamp)}</p>
+                  </div>
+                ))}
+            </div>
+          ) : (
+            <p>هیچ کد تخفیفی موجود نیست.</p>
+          )}
+          <button
+            onClick={() => {
+              setIsLoggedIn(false);
+              setCurrentUser(null);
+              setPage("login");
+            }}
+            disabled={loading}
+          >
+            خروج
+          </button>
+        </div>
+      )}
+
+      {page === "gameRules" && isLoggedIn && (
+        <div className="game-rules">
+          <h2>شرایط بازی اطلاعات عمومی</h2>
+          <ul>
+            <li>بازی شامل 10 سوال اطلاعات عمومی است.</li>
+            <li>هر سوال 15 ثانیه زمان دارد.</li>
+            <li>اگر در 15 ثانیه جواب ندهید، به سوال بعدی می‌روید و امتیازی ثبت نمی‌شود.</li>
+            <li>برای دریافت تخفیف، باید حداقل به 7 سوال درست جواب دهید.</li>
+            <li>امتیاز 7: 15,000 تومان تخفیف</li>
+            <li>امتیاز 8: 20,000 تومان تخفیف</li>
+            <li>امتیاز 9: 25,000 تومان تخفیف</li>
+            <li>امتیاز 10: 30,000 تومان تخفیف</li>
+            <li>هر کاربر در هر روز فقط می‌تواند یک کد تخفیف دریافت کند.</li>
+            <li>کدهای تخفیف تا 24 ساعت معتبر هستند.</li>
+          </ul>
+          <button onClick={startGame} disabled={loading}>
+            شروع بازی
+          </button>
+          <button onClick={() => setPage("dashboard")} disabled={loading}>
+            بازگشت به داشبورد
+          </button>
+        </div>
+      )}
+
+      {page === "game" && isLoggedIn && (
+        <div className="game">
+          <h2>سوال {gameState.currentQuestionIndex + 1} از 10</h2>
+          <p>زمان باقی‌مانده: {gameState.timeLeft} ثانیه</p>
+          <div
+            style={{
+              width: "100%",
+              height: "10px",
+              backgroundColor: "#ccc",
+              borderRadius: "5px",
+              overflow: "hidden",
+              marginBottom: "20px",
+            }}
+          >
+            <div
+              style={{
+                width: `${(gameState.timeLeft / 15) * 100}%`,
+                height: "100%",
+                backgroundColor: "#5e2919",
+                transition: "width 1s linear",
+              }}
+            />
+          </div>
+          <p>{gameState.questions[gameState.currentQuestionIndex].question}</p>
+          <ul>
+            {gameState.questions[gameState.currentQuestionIndex].options.map(
+              (option, index) => (
+                <li key={index}>
+                  <label>
+                    <input
+                      type="radio"
+                      name="answer"
+                      value={option}
+                      checked={gameState.selectedAnswer === option}
+                      onChange={() => handleAnswerSelect(option)}
+                      disabled={loading}
+                    />
+                    {option}
+                  </label>
+                </li>
+              )
+            )}
+          </ul>
+          <button
+            onClick={handleNextQuestion}
+            disabled={!gameState.selectedAnswer || loading}
+          >
+            سوال بعدی
+          </button>
+        </div>
+      )}
+
+      {page === "gameResult" && isLoggedIn && (
+        <div className="game-result">
+          <h2>نتیجه بازی</h2>
+          <p>امتیاز شما: {gameState.score} از 10</p>
+          {gameState.score >= 7 && discounts.find(d => d.userPhone === currentUser.phoneNumber && d.timestamp >= Date.now() - 24 * 60 * 60 * 1000) && (
+            <p className="discount">
+              تبریک! شما {gameState.score === 7 ? 15000 : gameState.score === 8 ? 20000 : gameState.score === 9 ? 25000 : 30000} تومان تخفیف گرفتید!
+            </p>
+          )}
+          <button onClick={startGame} disabled={loading}>
+            بازی دوباره
+          </button>
+          <button onClick={() => setPage("dashboard")} disabled={loading}>
+            بازگشت به داشبورد
+          </button>
+        </div>
+      )}
+
+      {page === "admin" && isLoggedIn && currentUser.phoneNumber === "09901295140" && (
+        <div className="admin-panel">
+          <h2>پنل مدیریت — سفارش‌های در انتظار</h2>
+          {orders.length === 0 ? (
+            <p>هیچ سفارش در انتظاری ثبت نشده است.</p>
+          ) : (
+            <div className="orders-list">
+              {orders.map(order => (
+                <div key={order.id} className="order-admin-item">
+                  <h3>میز {order.tableNumber}</h3>
+                  <p>
+                    زمان ثبت: {new Date(order.timestamp).toLocaleString("fa-IR")}
+                  </p>
+                  <ul>
+                    {order.items.map((item, index) => (
+                      <li key={index}>
+                        {item.name} {item.flavor ? `- طعم: ${item.flavor}` : ""} (تعداد: {item.quantity}) - {(item.price * item.quantity).toLocaleString()} تومان
+                      </li>
+                    ))}
+                  </ul>
+                  <p>
+                    جمع کل: {order.items.reduce((sum, item) => sum + item.price * item.quantity, 0).toLocaleString()} تومان
+                  </p>
+                  <button
+                    onClick={() => markOrderAsCompleted(order.id)}
+                    disabled={loading}
+                  >
+                    تایید و حذف
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          <h2>درآمد هفتگی</h2>
+          <p>
+            جمع کل درآمد: {weeklyRevenue.total.toLocaleString()} تومان
+          </p>
+          <div className="chart-container">
+            <Bar data={chartData} options={chartOptions} />
+          </div>
+          <button onClick={resetWeeklyRevenue} disabled={loading}>
+            ریست درآمد هفتگی
+          </button>
+          <button
+            onClick={() => {
+              setIsLoggedIn(false);
+              setCurrentUser(null);
+              setPage("login");
+            }}
+            disabled={loading}
+          >
+            خروج از حساب
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
