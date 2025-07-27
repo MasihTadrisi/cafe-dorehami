@@ -1,10 +1,12 @@
 {
-  "functions": {
-    "api/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "rewrites": [
-    { "source": "/(.*)", "destination": "/frontend/$1" }
+    {
+      "source": "/api/:path*",
+      "destination": "https://cafe-backend-rrmi.onrender.com/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ]
 }
