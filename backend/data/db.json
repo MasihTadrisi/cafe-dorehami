@@ -1,0 +1,15 @@
+{
+  "orders": [
+    { "id": 1, "item": "Coffee", "quantity": 2, "price": 40000 },
+    { "id": 2, "item": "Cake", "quantity": 1, "price": 30000 }
+  ],
+  "users": [
+    { "id": 1, "username": "masih", "email": "masih@example.com" }
+  ],
+  "discounts": [
+    { "id": 1, "code": "OFF20", "amount": 20 }
+  ],
+  "weeklyRevenue": [
+    { "id": 1, "week": "2025-W30", "revenue": 160000 }
+  ]
+}
