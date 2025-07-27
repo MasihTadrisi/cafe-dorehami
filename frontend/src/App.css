@@ -163,7 +163,7 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 400px;
+  height: 420px;
   transition: all 0.3s ease;
 }
 
@@ -823,12 +823,12 @@ h1 {
   }
 
   .menu-item {
-    height: 400px;
+    height: 420px;
     padding: 12px;
   }
 
   .menu-item img {
-    height: 180px;
+    height: 200px;
   }
 
   .menu-item h3 {
@@ -865,6 +865,15 @@ h1 {
   .category-buttons button {
     padding: 8px 15px;
     font-size: 14px;
+    background-color: #d9cbbf;
+    color: #5e2919;
+  }
+
+  .category-buttons button.active,
+  .category-buttons button:hover:not(:disabled) {
+    background-color: #d9cbbf;
+    color: #5e2919;
+    box-shadow: 0 5px 12px rgba(94, 41, 25, 0.5);
   }
 
   .order {
@@ -1012,11 +1021,11 @@ h1 {
   }
 
   .menu-item {
-    height: 380px;
+    height: 400px;
   }
 
   .menu-item img {
-    height: 160px;
+    height: 180px;
   }
 
   .menu-item h3 {
@@ -1039,6 +1048,15 @@ h1 {
   .category-buttons button {
     padding: 7px 12px;
     font-size: 13px;
+    background-color: #d9cbbf;
+    color: #5e2919;
+  }
+
+  .category-buttons button.active,
+  .category-buttons button:hover:not(:disabled) {
+    background-color: #d9cbbf;
+    color: #5e2919;
+    box-shadow: 0 5px 12px rgba(94, 41, 25, 0.5);
   }
 
   .pages-button button {
