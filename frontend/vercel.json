@@ -1,19 +1,10 @@
-
-     {
-       "rewrites": [
-         {
-           "source": "/api/:path*",
-           "destination": "/api/:path*"
-         },
-         {
-           "source": "/(.*)",
-           "destination": "/index.html"
-         }
-       ],
-       "functions": {
-         "api/*.js": {
-           "memory": 128,
-           "maxDuration": 10
-         }
-       }
-     }
+{
+  "functions": {
+    "api/*.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/frontend/$1" }
+  ]
+}
