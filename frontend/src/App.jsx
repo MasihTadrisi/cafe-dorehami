@@ -14,7 +14,7 @@ import "./App.css";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-const API_URL = "/api";
+const API_URL = "https://cafe-backend-rrmi.onrender.com";
 
 const categorizedMenu = {
   "نوشیدنی‌های گرم": [
