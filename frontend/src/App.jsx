@@ -127,8 +127,12 @@ function App() {
     setError(null);
     try {
       const res = await axios.get(`${API_URL}/api/orders`);
-      setOrders(res.data || []);
+      const validOrders = (res.data || []).filter(
+        o => o.id && o.tableNumber && !isNaN(new Date(o.timestamp).getTime())
+      );
+      setOrders(validOrders);
     } catch (err) {
+      console.error("Fetch orders error:", err.response || err.message);
       setError("خطا در دریافت سفارش‌ها: " + err.message);
       setOrders([]);
     } finally {
@@ -144,6 +148,7 @@ function App() {
       const data = res.data && res.data.id ? res.data : { id: "1", total: 0, daily: Array(7).fill(0) };
       setWeeklyRevenue(data);
     } catch (err) {
+      console.error("Fetch revenue error:", err.response || err.message);
       setError("خطا در دریافت درآمد: " + err.message);
       setWeeklyRevenue({ id: "1", total: 0, daily: Array(7).fill(0) });
     } finally {
@@ -161,6 +166,7 @@ function App() {
       const validDiscounts = res.data.filter(d => now - d.timestamp < oneDay);
       setDiscounts(validDiscounts);
     } catch (err) {
+      console.error("Fetch discounts error:", err.response || err.message);
       setError("خطا در دریافت تخفیف‌ها: " + err.message);
       setDiscounts([]);
     } finally {
@@ -227,6 +233,7 @@ function App() {
       setUserName("");
       setError("ثبت‌نام با موفقیت انجام شد.");
     } catch (err) {
+      console.error("Register error:", err.response || err.message);
       setError("خطا در ثبت‌نام: " + err.message);
     } finally {
       setLoading(false);
@@ -257,6 +264,7 @@ function App() {
       setPhoneNumber("");
       setError("ورود با موفقیت انجام شد.");
     } catch (err) {
+      console.error("Login error:", err.response || err.message);
       setError("خطا در ورود: " + err.message);
     } finally {
       setLoading(false);
@@ -279,6 +287,7 @@ function App() {
         setError("رمز عبور اشتباه است.");
       }
     } catch (err) {
+      console.error("Admin login error:", err.response || err.message);
       setError("خطا در ورود مدیر: " + err.message);
     } finally {
       setLoading(false);
@@ -416,7 +425,7 @@ function App() {
   const removeFromOrder = useCallback(
     (id, flavor) => {
       setSelectedItems(prevItems =>
-        prevItems.filter(item => !(item.id === id && (flavor ? item.flavor === flavor : !item.flavor)))
+        prevItems.filter(item => !(item.id === id && (flavor ? item.flavor === flavor : !i.flavor)))
       );
     },
     []
@@ -448,6 +457,7 @@ function App() {
       setTableNumber("");
       setError("سفارش با موفقیت ثبت شد!");
     } catch (err) {
+      console.error("Submit order error:", err.response || err.message);
       setError("خطا در ثبت سفارش: " + err.message);
     } finally {
       setLoading(false);
@@ -471,7 +481,11 @@ function App() {
       setError(null);
       try {
         const order = orders.find(o => o.id === orderId);
-        if (!order) throw new Error("سفارش یافت نشد.");
+        if (!order || !order.tableNumber || isNaN(new Date(order.timestamp).getTime())) {
+          setOrders(prev => prev.filter(o => o.id !== orderId));
+          setError("سفارش نامعتبر حذف شد.");
+          return;
+        }
         const orderTotal = order.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
         const orderDate = new Date(order.timestamp);
         const today = new Date();
@@ -490,9 +504,10 @@ function App() {
         }
         await axios.delete(`${API_URL}/api/orders/${orderId}`);
         setOrders(prev => prev.filter(o => o.id !== orderId));
-        setError("سفارش با موفقیت تایید شد.");
+        setError("سفارش با موفقیت تأیید و حذف شد.");
       } catch (err) {
-        setError("خطا در تایید سفارش: " + err.message);
+        console.error("Delete order error:", err.response || err.message);
+        setError(`خطا در تأیید/حذف سفارش: ${err.message}`);
       } finally {
         setLoading(false);
       }
@@ -511,6 +526,7 @@ function App() {
       setWeeklyRevenue({ id: "1", total: 0, daily: Array(7).fill(0) });
       setError("درآمد هفتگی با موفقیت ریست شد.");
     } catch (err) {
+      console.error("Reset revenue error:", err.response || err.message);
       setError("خطا در ریست درآمد: " + err.message);
     } finally {
       setLoading(false);
@@ -900,25 +916,29 @@ function App() {
             <div className="orders-list">
               {orders.map(order => (
                 <div key={order.id} className="order-admin-item">
-                  <h3>میز {order.tableNumber}</h3>
+                  <h3>میز {order.tableNumber || "نامشخص"}</h3>
                   <p>
-                    زمان ثبت: {new Date(order.timestamp).toLocaleString("fa-IR")}
+                    زمان ثبت: {isNaN(new Date(order.timestamp).getTime()) ? "نامعتبر" : new Date(order.timestamp).toLocaleString("fa-IR")}
                   </p>
                   <ul>
-                    {order.items && order.items.map((item, index) => (
-                      <li key={index}>
-                        {item.name} {item.flavor ? `- طعم: ${item.flavor}` : ""} (تعداد: {item.quantity}) - {(item.price * item.quantity).toLocaleString()} تومان
-                      </li>
-                    ))}
+                    {order.items && order.items.length > 0 ? (
+                      order.items.map((item, index) => (
+                        <li key={index}>
+                          {item.name} {item.flavor ? `- طعم: ${item.flavor}` : ""} (تعداد: {item.quantity || 1}) - {((item.price || 0) * (item.quantity || 1)).toLocaleString()} تومان
+                        </li>
+                      ))
+                    ) : (
+                      <li>بدون آیتم</li>
+                    )}
                   </ul>
                   <p>
-                    جمع کل: {order.items && order.items.reduce((sum, item) => sum + item.price * item.quantity, 0).toLocaleString()} تومان
+                    جمع کل: {order.items && order.items.length > 0 ? order.items.reduce((sum, item) => sum + (item.price || 0) * (item.quantity || 1), 0).toLocaleString() : "0"} تومان
                   </p>
                   <button
                     onClick={() => markOrderAsCompleted(order.id)}
                     disabled={loading}
                   >
-                    تایید و حذف
+                    تأیید و حذف
                   </button>
                 </div>
               ))}
