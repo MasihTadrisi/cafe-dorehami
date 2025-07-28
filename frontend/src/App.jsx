@@ -130,6 +130,7 @@ function App() {
       setOrders(res.data || []);
     } catch (err) {
       setError("خطا در دریافت سفارش‌ها: " + err.message);
+      setOrders([]);
     } finally {
       setLoading(false);
     }
@@ -143,6 +144,7 @@ function App() {
       setWeeklyRevenue(res.data || { id: 1, total: 0, daily: Array(7).fill(0) });
     } catch (err) {
       setError("خطا در دریافت درآمد: " + err.message);
+      setWeeklyRevenue({ id: 1, total: 0, daily: Array(7).fill(0) });
     } finally {
       setLoading(false);
     }
@@ -159,6 +161,7 @@ function App() {
       setDiscounts(validDiscounts);
     } catch (err) {
       setError("خطا در دریافت تخفیف‌ها: " + err.message);
+      setDiscounts([]);
     } finally {
       setLoading(false);
     }
@@ -412,7 +415,7 @@ function App() {
   const removeFromOrder = useCallback(
     (id, flavor) => {
       setSelectedItems(prevItems =>
-        prevItems.filter(item => !(item.id === id && (flavor ? item.flavor === flavor : !item.flavor)))
+        prevItems.filter(item => !(item.id === id && (flavor ? item.flavor === flavor : !i.flavor)))
       );
     },
     []
@@ -890,7 +893,7 @@ function App() {
       {page === "admin" && isLoggedIn && currentUser.phoneNumber === "09901295140" && (
         <div className="admin-panel">
           <h2>پنل مدیریت — سفارش‌های در انتظار</h2>
-          {orders.length === 0 ? (
+          {!orders || orders.length === 0 ? (
             <p>هیچ سفارش در انتظاری ثبت نشده است.</p>
           ) : (
             <div className="orders-list">
@@ -901,14 +904,14 @@ function App() {
                     زمان ثبت: {new Date(order.timestamp).toLocaleString("fa-IR")}
                   </p>
                   <ul>
-                    {order.items.map((item, index) => (
+                    {order.items && order.items.map((item, index) => (
                       <li key={index}>
                         {item.name} {item.flavor ? `- طعم: ${item.flavor}` : ""} (تعداد: {item.quantity}) - {(item.price * item.quantity).toLocaleString()} تومان
                       </li>
                     ))}
                   </ul>
                   <p>
-                    جمع کل: {order.items.reduce((sum, item) => sum + item.price * item.quantity, 0).toLocaleString()} تومان
+                    جمع کل: {order.items && order.items.reduce((sum, item) => sum + item.price * item.quantity, 0).toLocaleString()} تومان
                   </p>
                   <button
                     onClick={() => markOrderAsCompleted(order.id)}
