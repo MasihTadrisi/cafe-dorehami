@@ -47,7 +47,7 @@ const categorizedMenu = {
   "کیک ها": [
     { id: 24, name: "کیک شکلاتی", price: 120000, image: "https://rang-rangi.ir/images/1280/cake-khis.jpg" },
     { id: 25, name: "کیک روز", price: 140000, image: "https://zino.cafe/wp-content/uploads/2020/12/%DA%A9%DB%8C%DA%A9-%D8%B1%D9%88%D8%B2.jpg" },
-    { id: 26, name: "کبک بستنی", price: 150000, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvrbZSOaW1ZXTNX8lEjJEh0eLwmigc61Akig&s" },
+    { id: 26, name: "کبک بستنی", price: 150000, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:GcSvrbZSOaW1ZXTNX8lEjJEh0eLwmigc61Akig&s" },
     { id: 27, name: "پنکیک نوتلا", price: 165000, image: "https://static.cdn.asset.aparat.cloud/avt/52788440-3410-l__6627.jpg?width=900&quality=90&secret=aZf9hDmNYoT_n8fU1pQDzg" },
   ],
   "انواع شیک": [
@@ -96,7 +96,7 @@ function App() {
   const [tableNumber, setTableNumber] = useState("");
   const [page, setPage] = useState("order");
   const [orders, setOrders] = useState([]);
-  const [weeklyRevenue, setWeeklyRevenue] = useState({ id: 1, total: 0, daily: Array(7).fill(0) });
+  const [weeklyRevenue, setWeeklyRevenue] = useState({ id: "1", total: 0, daily: Array(7).fill(0) });
   const [phoneNumber, setPhoneNumber] = useState("");
   const [userName, setUserName] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -141,10 +141,11 @@ function App() {
     setError(null);
     try {
       const res = await axios.get(`${API_URL}/api/weeklyRevenue/1`);
-      setWeeklyRevenue(res.data || { id: 1, total: 0, daily: Array(7).fill(0) });
+      const data = res.data && res.data.id ? res.data : { id: "1", total: 0, daily: Array(7).fill(0) };
+      setWeeklyRevenue(data);
     } catch (err) {
       setError("خطا در دریافت درآمد: " + err.message);
-      setWeeklyRevenue({ id: 1, total: 0, daily: Array(7).fill(0) });
+      setWeeklyRevenue({ id: "1", total: 0, daily: Array(7).fill(0) });
     } finally {
       setLoading(false);
     }
@@ -415,7 +416,7 @@ function App() {
   const removeFromOrder = useCallback(
     (id, flavor) => {
       setSelectedItems(prevItems =>
-        prevItems.filter(item => !(item.id === id && (flavor ? item.flavor === flavor : !i.flavor)))
+        prevItems.filter(item => !(item.id === id && (flavor ? item.flavor === flavor : !item.flavor)))
       );
     },
     []
@@ -478,14 +479,14 @@ function App() {
         weekStart.setDate(today.getDate() - today.getDay());
         if (orderDate >= weekStart && orderDate <= today) {
           const dayIndex = orderDate.getDay();
-          const newDaily = [...weeklyRevenue.daily];
+          const newDaily = [...(weeklyRevenue.daily || Array(7).fill(0))];
           newDaily[dayIndex] = (newDaily[dayIndex] || 0) + orderTotal;
-          const newTotal = weeklyRevenue.total + orderTotal;
+          const newTotal = (weeklyRevenue.total || 0) + orderTotal;
           await axios.patch(`${API_URL}/api/weeklyRevenue/1`, {
             total: newTotal,
             daily: newDaily,
           });
-          setWeeklyRevenue({ id: 1, total: newTotal, daily: newDaily });
+          setWeeklyRevenue({ id: "1", total: newTotal, daily: newDaily });
         }
         await axios.delete(`${API_URL}/api/orders/${orderId}`);
         setOrders(prev => prev.filter(o => o.id !== orderId));
@@ -507,7 +508,7 @@ function App() {
         total: 0,
         daily: Array(7).fill(0),
       });
-      setWeeklyRevenue({ id: 1, total: 0, daily: Array(7).fill(0) });
+      setWeeklyRevenue({ id: "1", total: 0, daily: Array(7).fill(0) });
       setError("درآمد هفتگی با موفقیت ریست شد.");
     } catch (err) {
       setError("خطا در ریست درآمد: " + err.message);
@@ -525,7 +526,7 @@ function App() {
     datasets: [
       {
         label: "درآمد روزانه (تومان)",
-        data: weeklyRevenue.daily,
+        data: weeklyRevenue.daily || Array(7).fill(0),
         backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
@@ -925,7 +926,7 @@ function App() {
           )}
           <h2>درآمد هفتگی</h2>
           <p>
-            جمع کل درآمد: {weeklyRevenue.total.toLocaleString()} تومان
+            جمع کل درآمد: {(weeklyRevenue.total ?? 0).toLocaleString()} تومان
           </p>
           <div className="chart-container">
             <Bar data={chartData} options={chartOptions} />
