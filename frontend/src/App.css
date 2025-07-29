@@ -172,7 +172,7 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 420px;
+  height: 380px; /* ارتفاع کاهش یافت چون ستاره‌ها حذف شدند */
   transition: all 0.3s ease;
 }
 
@@ -205,22 +205,6 @@ h1 {
 
 .menu-item img:hover:not(:disabled) {
   transform: scale(1.05);
-}
-
-/* ستاره‌های امتیاز */
-.stars {
-  margin-bottom: 12px;
-  font-size: 20px;
-}
-
-.stars span {
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.stars span:hover,
-.stars span:hover ~ span {
-  color: #f5c518 !important;
 }
 
 /* کنترل‌های تعداد */
@@ -891,7 +875,7 @@ h1 {
   }
 
   .menu-item {
-    height: 420px;
+    height: 360px; /* کاهش ارتفاع به دلیل حذف ستاره‌ها */
     padding: 12px;
   }
 
@@ -933,8 +917,8 @@ h1 {
   .category-buttons button {
     padding: 8px 15px;
     font-size: 14px;
-    background-color: #e6d9cb;
-    color: #4a2b1a;
+    background-color: #4a2b1a; /* پس‌زمینه تیره‌تر برای موبایل */
+    color: #f9f6f2; /* متن سفید برای خوانایی */
   }
 
   .category-buttons button.active,
@@ -1089,7 +1073,8 @@ h1 {
   }
 
   .menu-item {
-    height: 400px;
+    height: 340px; /* کاهش ارتفاع به دلیل حذف ستاره‌ها */
+    padding: 12px;
   }
 
   .menu-item img {
@@ -1116,8 +1101,8 @@ h1 {
   .category-buttons button {
     padding: 7px 12px;
     font-size: 13px;
-    background-color: #e6d9cb;
-    color: #4a2b1a;
+    background-color: #4a2b1a; /* پس‌زمینه تیره‌تر برای موبایل */
+    color: #f9f6f2; /* متن سفید برای خوانایی */
   }
 
   .category-buttons button.active,
