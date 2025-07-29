@@ -19,7 +19,7 @@ const API_URL = "https://cafe-backend-rrmi.onrender.com";
 const categorizedMenu = {
   "نوشیدنی‌های گرم": [
     { id: 1, name: "سرویس چای دونفره", price: 100000, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFftmc4FYop2a0r77DCRtjHZO7-nJOddA9cQ&s" },
-    { id: 2, name: "چای لیوانی", price: 40000, image: "https://cdn.axehonari.ir/images/80dd6a60-587c-11ee-bde2-936864506c8a.jpg" },
+    { id: 2, name: "چای لیوانی", price: 40000, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-IpFAi5Z53e3kVYrDLtS3Uj1Ta3yPUFkqiA&s" },
     { id: 3, name: "چای دارچین و عسل", price: 140000, image: "https://salamatim.com/wp-content/uploads/2021/04/Health-Benefits-Of-Cinnamon-Tea2.jpg" },
     { id: 4, name: "چای ماسالا", price: 130000, image: "https://sarinamasala.com/wp-content/uploads/2025/05/IMG_3828-1.jpg" },
     { id: 5, name: "قهوه لاته", price: 130000, image: "https://kalleh.com/book/wp-content/uploads/sites/2/2025/01/%D9%82%D9%87%D9%88%D9%87-%D9%84%D8%A7%D8%AA%D9%87-%DA%86%DB%8C%D8%B3%D8%AA.jpg" },
@@ -109,6 +109,7 @@ function App() {
   const [ratings, setRatings] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showError, setShowError] = useState(false);
   const orderSectionRef = useRef(null);
 
   // Game State
@@ -120,6 +121,18 @@ function App() {
     timeLeft: 15,
   });
   const [discounts, setDiscounts] = useState([]);
+
+  // مدیریت محو شدن ارور بعد از 5 ثانیه
+  useEffect(() => {
+    if (error) {
+      setShowError(true);
+      const timer = setTimeout(() => {
+        setShowError(false);
+        setTimeout(() => setError(null), 500); // پاک کردن ارور بعد از اتمام انیمیشن
+      }, 5000); // 5 ثانیه
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   // Fetch Initial Data
   const fetchOrders = useCallback(async () => {
@@ -425,7 +438,7 @@ function App() {
   const removeFromOrder = useCallback(
     (id, flavor) => {
       setSelectedItems(prevItems =>
-        prevItems.filter(item => !(item.id === id && (flavor ? item.flavor === flavor : !i.flavor)))
+        prevItems.filter(item => !(item.id === id && (flavor ? item.flavor === flavor : !item.flavor)))
       );
     },
     []
@@ -561,7 +574,11 @@ function App() {
   return (
     <div className="App">
       {loading && <p className="loading-text">در حال بارگذاری...</p>}
-      {error && <p className="error-text">{error}</p>}
+      {error && (
+        <p className={`error-text ${showError ? "fade-in" : "fade-out"}`}>
+          {error}
+        </p>
+      )}
 
       <nav className="pages-button">
         <button onClick={() => setPage("order")} disabled={loading}>
