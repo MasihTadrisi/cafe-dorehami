@@ -213,7 +213,6 @@ function App() {
       const twelveHours = 12 * 60 * 60 * 1000;
       const validDiscounts = res.data.filter(d => now - d.timestamp < twelveHours);
       setDiscounts(validDiscounts);
-      // تنظیم تایمرهای اولیه
       const initialCountdown = {};
       validDiscounts.forEach(discount => {
         initialCountdown[discount.id] = getRemainingTimeInSeconds(discount.timestamp);
@@ -441,6 +440,16 @@ function App() {
     return `${days[date.getDay()]}، ${date.toLocaleDateString("fa-IR")}`;
   };
 
+  // کپی کد تخفیف به کلیپ‌بورد
+  const copyDiscountCode = code => {
+    navigator.clipboard.writeText(code).then(() => {
+      setError("کد تخفیف کپی شد!");
+    }).catch(err => {
+      console.error("Error copying code:", err);
+      setError("خطا در کپی کردن کد!");
+    });
+  };
+
   // Order Functions
   const handleItemClick = useCallback(
     item => {
@@ -492,7 +501,7 @@ function App() {
   const removeFromOrder = useCallback(
     (id, flavor) => {
       setSelectedItems(prevItems =>
-        prevItems.filter(item => !(item.id === id && (flavor ? item.flavor === flavor : !i.flavor)))
+        prevItems.filter(item => !(item.id === id && (flavor ? item.flavor === flavor : !item.flavor)))
       );
     },
     []
@@ -862,11 +871,22 @@ function App() {
                     key={index}
                     className={`discount-card ${countdown[discount.id] <= 0 ? "expired" : ""}`}
                   >
-                    <p className="discount-congrats">تبریک! شما یک کد تخفیف دریافت کردید!</p>
-                    <p>کد: {discount.code}</p>
-                    <p>مبلغ تخفیف: {discount.amount.toLocaleString()} تومان</p>
-                    <p>زمان باقی‌مانده: {formatCountdown(countdown[discount.id] || 0)}</p>
-                    <p>تاریخ ثبت: {getFormattedDate(discount.timestamp)}</p>
+                    <p className="discount-congrats">🎉 تبریک! شما یک کد تخفیف دریافت کردید!</p>
+                    <p className="discount-code">
+                      کد: {discount.code}
+                      <button
+                        className="copy-button"
+                        onClick={() => copyDiscountCode(discount.code)}
+                        disabled={countdown[discount.id] <= 0 || loading}
+                      >
+                        کپی
+                      </button>
+                    </p>
+                    <p className="discount-amount">مبلغ تخفیف: {discount.amount.toLocaleString()} تومان</p>
+                    <p className={`discount-timer ${countdown[discount.id] <= 300 ? "warning" : ""}`}>
+                      زمان باقی‌مانده: {formatCountdown(countdown[discount.id] || 0)}
+                    </p>
+                    <p className="discount-date">📅 تاریخ ثبت: {getFormattedDate(discount.timestamp)}</p>
                   </div>
                 ))}
             </div>
@@ -913,24 +933,15 @@ function App() {
         <div className="game">
           <h2>سوال {gameState.currentQuestionIndex + 1} از 10</h2>
           <p>زمان باقی‌مانده: {gameState.timeLeft} ثانیه</p>
-          <div
-            style={{
-              width: "100%",
-              height: "10px",
-              backgroundColor: "#ccc",
-              borderRadius: "5px",
-              overflow: "hidden",
-              marginBottom: "20px",
-            }}
-          >
-            <div
-              style={{
-                width: `${(gameState.timeLeft / 15) * 100}%`,
-                height: "100%",
-                backgroundColor: "#5e2919",
-                transition: "width 1s linear",
-              }}
-            />
+          <div className="timer-container">
+            <div className="timer-bar">
+              <div
+                className={`timer-progress ${gameState.timeLeft <= 5 ? "warning" : ""}`}
+                style={{
+                  width: `${(gameState.timeLeft / 15) * 100}%`,
+                }}
+              />
+            </div>
           </div>
           <p>{gameState.questions[gameState.currentQuestionIndex].question}</p>
           <ul>
