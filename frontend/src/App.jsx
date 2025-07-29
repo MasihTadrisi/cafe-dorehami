@@ -51,7 +51,7 @@ const categorizedMenu = {
     { id: 27, name: "پنکیک نوتلا", price: 165000, image: "https://static.cdn.asset.aparat.cloud/avt/52788440-3410-l__6627.jpg?width=900&quality=90&secret=aZf9hDmNYoT_n8fU1pQDzg" },
   ],
   "انواع شیک": [
-    { id: 28, name: "شیک نوتلا", price: 190000, image: "https://cactus-food.ir/Content/images/3596/Product/Thumb3/203206/%D8%B4%DB%8C%DA%A9%20%D9%84%DB%8C%D8%AF%DB%8C%20%DDA%86%D8%A7%DA%A9%D9%84%D8%AA.jpg" },
+    { id: 28, name: "شیک نوتلا", price: 190000, image: "https://saas-behtarino.hs3.ir/media/business_products_images/img-20220909-wa0007.jpg" },
     { id: 29, name: "شیک شکلاتی", price: 170000, image: "https://saas-behtarino.hs3.ir/media/business_products_images/7ddfe124-4a5c-4ed1-9b7f-065f7625723b.jpg" },
     { id: 30, name: "شیک موز شکلات", price: 185000, image: "https://blog.okcs.com/wp-content/uploads/2023/05/Healthy-Banana-Chocolate-Smoothie-720x720-1.jpg" },
     { id: 31, name: "شیک شکلات نسکافه", price: 185000, image: "https://ashpazsho.ir/wp-content/uploads/2021/04/milkshake-chocolate.webp" },
