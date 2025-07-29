@@ -62,6 +62,15 @@ body {
   100% { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
+.fade-out {
+  animation: fadeOut 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+}
+
 /* دکمه‌ها */
 button {
   cursor: pointer;
@@ -409,6 +418,8 @@ h1 {
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(94, 41, 25, 0.3);
   transition: transform 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .dashboard .discount-card:hover:not(.expired) {
@@ -421,10 +432,67 @@ h1 {
   opacity: 0.7;
 }
 
-.dashboard .discount-card p {
+.dashboard .discount-card .discount-congrats {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #28a745;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-bottom: 12px;
+  animation: pulse 1.5s infinite;
+}
+
+.dashboard .discount-card .discount-code {
   font-size: 1rem;
   font-weight: 600;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 10px;
+  border-radius: 5px;
   margin: 8px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard .discount-card .discount-code button.copy-button {
+  padding: 4px 8px;
+  font-size: 0.9rem;
+  background: #28a745;
+  border-radius: 5px;
+}
+
+.dashboard .discount-card .discount-code button.copy-button:hover:not(:disabled) {
+  background: #218838;
+}
+
+.dashboard .discount-card .discount-amount {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f5c518;
+  margin: 8px 0;
+}
+
+.dashboard .discount-card .discount-timer {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 8px 0;
+}
+
+.dashboard .discount-card .discount-timer.warning {
+  color: #ff4d4d;
+  animation: shake 0.5s infinite;
+}
+
+.dashboard .discount-card .discount-date {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #e6d9cb;
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .dashboard button {
@@ -432,6 +500,20 @@ h1 {
   padding: 8px 20px;
   font-size: 15px;
   border-radius: 8px;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
+  75% { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
 }
 
 /* شرایط بازی */
@@ -576,12 +658,6 @@ h1 {
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(40, 167, 69, 0.2);
   animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-  100% { transform: scale(1); }
 }
 
 .game-result button {
@@ -801,14 +877,6 @@ h1 {
 .timer-progress.warning {
   background: linear-gradient(90deg, #b44332 0%, #d65447 100%);
   animation: shake 0.5s infinite;
-}
-
-@keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-2px); }
-  50% { transform: translateX(2px); }
-  75% { transform: translateX(-2px); }
-  100% { transform: translateX(0); }
 }
 
 /* پاسخگویی برای موبایل */
