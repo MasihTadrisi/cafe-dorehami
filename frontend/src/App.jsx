@@ -25,9 +25,9 @@ const categorizedMenu = {
     { id: 5, name: "قهوه لاته", price: 130000, image: "https://kalleh.com/book/wp-content/uploads/sites/2/2025/01/%D9%82%D9%87%D9%88%D9%87-%D9%84%D8%A7%D8%AA%D9%87-%DA%86%DB%8C%D8%B3%D8%AA.jpg" },
     { id: 6, name: "قهوه اسپرسو", price: 60000, image: "https://espresso-market.com/wp-content/uploads/2024/08/unnamed-1.jpg" },
     { id: 7, name: "قهوه ترک", price: 65000, image: "https://cactus-food.ir/Content/images/3596/Product/209688/%D9%82%D9%87%D9%88%D9%87%20%D8%AA%D8%B1%DA%A9.jpg" },
-    { id: 8, name: "آفوگاتو", price: 135000, image: "https://blog.okcs.com/wp-content/uploads/2023/06/%D8%A2%D9%811.jpg" },
+    { id: 8, name: "آفوگاتو", price: 135000, image: "https://images.pexels.com/photos/14704659/pexels-photo-14704659.jpeg" },
     { id: 9, name: "هات چاکلت", price: 130000, image: "https://www.cocoterra.com/wp-content/uploads/belgian-hot-chocolate-recipe-drink.jpg" },
-    { id: 10, name: "نسکافه گلد", price: 110000, image: "https://behicoffee.com/wp-content/uploads/2023/07/Spray-dried-coffee-with-coffee-mate.jpg" },
+    { id: 10, name: "نسکافه گلد", price: 110000, image: "https://images.pexels.com/photos/10990310/pexels-photo-10990310.jpeg" },
     { id: 11, name: "شیرنسکافه", price: 135000, image: "https://cafe-abasabad.ir/wp-content/uploads/2024/02/frame-101-65c1ed7957f4c.webp" },
   ],
   "نوشیدنی‌های سرد": [
@@ -47,11 +47,11 @@ const categorizedMenu = {
   "کیک ها": [
     { id: 24, name: "کیک شکلاتی", price: 120000, image: "https://rang-rangi.ir/images/1280/cake-khis.jpg" },
     { id: 25, name: "کیک روز", price: 140000, image: "https://zino.cafe/wp-content/uploads/2020/12/%DA%A9%DB%8C%DA%A9-%D8%B1%D9%88%D8%B2.jpg" },
-    { id: 26, name: "کیک بستنی", price: 150000, image: "https://files.namnak.com/users/sr/aup/201807/379_pics/%DA%A9%DB%8C%DA%A9-%D8%A8%D8%B3%D8%AA%D9%86%DB%8C.webp" },
+    { id: 26, name: "کبک بستنی", price: 150000, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:GcSvrbZSOaW1ZXTNX8lEjJEh0eLwmigc61Akig&s" },
     { id: 27, name: "پنکیک نوتلا", price: 165000, image: "https://static.cdn.asset.aparat.cloud/avt/52788440-3410-l__6627.jpg?width=900&quality=90&secret=aZf9hDmNYoT_n8fU1pQDzg" },
   ],
   "انواع شیک": [
-    { id: 28, name: "شیک نوتلا", price: 190000, image: "https://saas-behtarino.hs3.ir/media/business_products_images/img-20220909-wa0007.jpg" },
+    { id: 28, name: "شیک نوتلا", price: 190000, image: "https://cactus-food.ir/Content/images/3596/Product/Thumb3/203206/%D8%B4%DB%8C%DA%A9%20%D9%84%DB%8C%D8%AF%DB%8C%20%DDA%86%D8%A7%DA%A9%D9%84%D8%AA.jpg" },
     { id: 29, name: "شیک شکلاتی", price: 170000, image: "https://saas-behtarino.hs3.ir/media/business_products_images/7ddfe124-4a5c-4ed1-9b7f-065f7625723b.jpg" },
     { id: 30, name: "شیک موز شکلات", price: 185000, image: "https://blog.okcs.com/wp-content/uploads/2023/05/Healthy-Banana-Chocolate-Smoothie-720x720-1.jpg" },
     { id: 31, name: "شیک شکلات نسکافه", price: 185000, image: "https://ashpazsho.ir/wp-content/uploads/2021/04/milkshake-chocolate.webp" },
@@ -111,7 +111,7 @@ function App() {
   const [showError, setShowError] = useState(false);
   const orderSectionRef = useRef(null);
   const [discounts, setDiscounts] = useState([]);
-  const [countdown, setCountdown] = useState({}); // State برای تایمرهای معکوس
+  const [countdown, setCountdown] = useState({});
 
   // Game State
   const [gameState, setGameState] = useState({
@@ -650,7 +650,7 @@ function App() {
           onClick={() => setPage(isLoggedIn ? "dashboard" : "login")}
           disabled={loading}
         >
-          سرگرمی
+          چالش تخفیف
         </button>
       </nav>
 
@@ -794,6 +794,7 @@ function App() {
       {page === "login" && (
         <div className="login-panel">
           <h2>ورود / ثبت‌نام</h2>
+          <p className="discount-teaser">🎉 با چالش تخفیف، تا ۳۰,۰۰۰ تومان تخفیف بگیرید!</p>
           <input
             type="text"
             placeholder="شماره موبایل (11 رقم)"
