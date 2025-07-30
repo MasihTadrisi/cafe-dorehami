@@ -650,7 +650,7 @@ function App() {
           onClick={() => setPage(isLoggedIn ? "dashboard" : "login")}
           disabled={loading}
         >
-          سرگرمی
+          بازی و تخفیف
         </button>
       </nav>
 
