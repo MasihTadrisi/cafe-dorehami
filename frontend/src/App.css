@@ -85,14 +85,14 @@
   background-color: #e0b015;
 }
 
-.quantity-control {
+.Quantity-control {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
 }
 
-.quantity-control button {
+.Quantity-control button {
   width: 40px;
   height: 40px;
   border: none;
@@ -104,7 +104,7 @@
   transition: background-color 0.3s;
 }
 
-.quantity-control button:hover {
+.Quantity-control button:hover {
   background-color: #e0b015;
 }
 
@@ -194,21 +194,45 @@
 .go-to-order {
   position: fixed;
   bottom: 20px;
-  left: 20px;
-  width: 50px;
-  height: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   background-color: #f5c518;
   color: #2b1b12;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 0 15px rgba(245, 197, 24, 0.5);
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  animation: bounce 1.5s ease-in-out infinite;
 }
 
 .go-to-order:hover {
   background-color: #e0b015;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4), 0 0 20px rgba(245, 197, 24, 0.7);
+}
+
+.go-to-order:disabled {
+  background-color: #b0a8a0;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, -10px);
+  }
 }
 
 .pages-button {
@@ -718,93 +742,4 @@
 
 .flavor-selector-modal button:hover {
   background-color: #e0b015;
-}
-
-/* استایل‌های ریسپانسیو برای موبایل */
-@media (max-width: 768px) {
-  .menu {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
-    padding: 15px;
-  }
-
-  .menu-item {
-    height: 360px;
-  }
-
-  .cafe-title {
-    font-size: 2rem;
-  }
-
-  .category-buttons button {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-  }
-
-  .pages-button button {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-  }
-
-  .login-panel {
-    margin: 20px;
-    padding: 15px;
-  }
-
-  .dashboard {
-    margin: 20px;
-    padding: 15px;
-  }
-
-  .game-rules {
-    margin: 20px;
-    padding: 15px;
-  }
-
-  .game {
-    margin: 20px;
-    padding: 15px;
-  }
-
-  .game-result {
-    margin: 20px;
-    padding: 15px;
-  }
-
-  .admin-panel {
-    margin: 20px;
-    padding: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .menu {
-    grid-template-columns: 1fr;
-  }
-
-  .menu-item {
-    height: 340px;
-  }
-
-  .cafe-title {
-    font-size: 1.8rem;
-  }
-
-  .category-buttons {
-    gap: 8px;
-  }
-
-  .category-buttons button {
-    padding: 6px 12px;
-    font-size: 0.8rem;
-  }
-
-  .pages-button button {
-    padding: 6px 12px;
-    font-size: 0.8rem;
-  }
-
-  .input-field {
-    max-width: 100%;
-  }
 }
