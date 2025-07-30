@@ -39,7 +39,7 @@ const categorizedMenu = {
     { id: 17, name: "شیرموز", price: 155000, image: "https://img9.irna.ir/d/r2/2023/04/25/0/170327889.png?ts=1682420033614" },
     { id: 18, name: "آب هویج", price: 135000, image: "https://vaziri-ind.ir/wp-content/uploads/2022/02/%D8%AE%D8%A7%D8%B5%DB%8C%D8%AA-%D8%A7%D8%A8-%D9%87%D9%88%DB%8C%D8%AC-%D8%A8%D8%B1%D8%A7%DB%8C-%D9%BE%D9%88%D8%B3%D8%AA.jpg" },
     { id: 19, name: "آب طالبی", price: 135000, image: "https://mag.delta.ir/wp-content/uploads/2024/04/Milkshake-.jpg" },
-    { id: 20, name: "آب پرتقال", price: 135000, image: "https://files.namnak.com/bi/users/nh/aup/202102/908_pics/%D8%AE%D9%88%D8%A7%D8%B5-%D8%A2%D8%A8-%D9%BE%D8%B1%D8%AA%D9%82%D8%A7%D9%84.webp" },
+    { id: 20, name: "آب پرتقال", price: 135000, image: "https://files.namnak.com/users/sr/aup/201807/379_pics/%D8%AE%D9%88%D8%A7%D8%B5-%D8%A2%D8%A8-%D9%BE%D8%B1%D8%AA%D9%82%D8%A7%D9%84.webp" },
     { id: 21, name: "آب هویج بستنی", price: 160000, image: "https://hamavita.com/wp-content/uploads/2023/09/c428d7ea-c6e4-4382-88c9-ad5a02dd95c3-500x500.webp" },
     { id: 22, name: "آّب طالبی بستنی", price: 160000, image: "https://iranipokht.ir/wp-content/uploads/2025/05/how-to-prepare-cantaloupe-juice-ice-cream-logo-1.jpg" },
     { id: 23, name: "موهیتو", price: 155000, image: "https://foodculture.ir/wp-content/uploads/2018/04/mojito-1300x867.jpg" },
@@ -786,7 +786,10 @@ function App() {
             )}
           </div>
           <button className="go-to-order" onClick={scrollToOrder} disabled={loading}>
-            ↓
+            <span>ثبت نهایی سفارش</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="arrow-icon">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5" />
+            </svg>
           </button>
         </>
       )}
@@ -794,6 +797,7 @@ function App() {
       {page === "login" && (
         <div className="login-panel">
           <h2>ورود / ثبت‌نام</h2>
+          <p className="discount-teaser">🎉 با چالش تخفیف، تا ۳۰,۰۰۰ تومان تخفیف بگیرید!</p>
           <input
             type="text"
             placeholder="شماره موبایل (11 رقم)"
