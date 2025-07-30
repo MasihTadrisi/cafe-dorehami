@@ -1,913 +1,793 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Vazir', Tahoma, sans-serif;
+.App {
+  font-family: "Vazirmatn", sans-serif;
   direction: rtl;
-  user-select: none;
-}
-
-body {
-  background: linear-gradient(135deg, #fff8f0 0%, #f1e9df 100%);
-  color: #3a2b1f;
+  text-align: right;
+  background-color: #2b1b12;
   min-height: 100vh;
-  padding: 15px;
-  font-size: 16px;
+  padding: 20px;
+  color: #f9f6f2;
 }
 
-/* پیام‌های خطا و موفقیت */
-.error-text, .loading-text {
-  position: fixed;
-  top: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  z-index: 1000;
-  animation: fadeIn 0.5s ease-in-out;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  max-width: 90%;
+.cafe-title {
+  font-size: 2.5rem;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.error-text {
-  background-color: #ffe6e6;
-  color: #b44332;
-  border: 2px solid #b44332;
-}
-
-.error-text::before {
-  content: "⚠️";
-  font-size: 1.2rem;
-}
-
-.loading-text {
-  background-color: #e6f3ff;
-  color: #2b6cb0;
-  border: 2px solid #2b6cb0;
-}
-
-.loading-text::before {
-  content: "⏳";
-  font-size: 1.2rem;
-}
-
-@keyframes fadeIn {
-  0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
-  100% { opacity: 1; transform: translateX(-50%) translateY(0); }
-}
-
-.fade-out {
-  animation: fadeOut 0.5s ease-in-out forwards;
-}
-
-@keyframes fadeOut {
-  0% { opacity: 1; transform: translateX(-50%) translateY(0); }
-  100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
-}
-
-/* دکمه‌ها */
-button {
-  cursor: pointer;
-  background: linear-gradient(135deg, #5e2919 0%, #7c3f24 100%);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 16px;
-  font-size: 16px;
-  font-weight: 700;
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-
-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #7c3f24 0%, #9b5432 100%);
-  transform: translateY(-2px);
-}
-
-button:disabled,
-button[disabled] {
-  background: #ccc;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* ناوبری صفحه */
-.pages-button {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
+  color: #f9f6f2;
   margin-bottom: 20px;
-  flex-wrap: wrap;
 }
 
-.pages-button button {
-  padding: 10px 25px;
-  font-size: 16px;
-  border-radius: 10px;
-  box-shadow: 0 3px 8px rgba(94, 41, 25, 0.2);
-}
-
-.pages-button button.active,
-.pages-button button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #7c3f24 0%, #9b5432 100%);
-  box-shadow: 0 5px 12px rgba(94, 41, 25, 0.4);
-}
-
-/* تیتر اصلی */
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: 900;
-  font-size: 2.3rem;
-  color: #5e2919;
-  text-shadow: 0 2px 4px rgba(94, 41, 25, 0.2);
-}
-
-/* دسته‌بندی منو */
 .category-buttons {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
+  justify-content: center;
   margin-bottom: 20px;
 }
 
 .category-buttons button {
-  padding: 10px 18px;
-  background-color: #e6d9cb;
-  color: #4a2b1a;
-  font-weight: 700;
-  border-radius: 25px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #4a2b1a;
+  color: #f9f6f2;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .category-buttons button.active,
-.category-buttons button:hover:not(:disabled) {
-  background-color: #5e2919;
-  color: #f9f6f2;
-  box-shadow: 0 5px 12px rgba(94, 41, 25, 0.5);
-  transform: translateY(-2px);
+.category-buttons button:hover {
+  background-color: #f5c518;
+  color: #2b1b12;
 }
 
-/* منوی آیتم‌ها */
 .menu {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-  margin-bottom: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
 }
 
 .menu-item {
-  background: #f9f6f2;
-  border-radius: 12px;
+  background-color: #3c2317;
+  border-radius: 8px;
   padding: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  height: 380px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 380px; /* ارتفاع کاهش یافت چون ستاره‌ها حذف شدند */
-  transition: all 0.3s ease;
-}
-
-.menu-item:hover:not(:disabled) {
-  box-shadow: 0 6px 15px rgba(94, 41, 25, 0.3);
-  transform: translateY(-3px);
 }
 
 .menu-item h3 {
   font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-  color: #5e2919;
+  margin: 10px 0;
+  color: #f9f6f2;
 }
 
 .menu-item p {
   font-size: 1rem;
-  font-weight: 600;
-  color: #7b5a39;
-  margin-bottom: 10px;
+  color: #f5c518;
 }
 
-.menu-item img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
+.menu-item button {
+  padding: 10px;
+  border: none;
   border-radius: 8px;
-  transition: transform 0.3s ease;
+  background-color: #f5c518;
+  color: #2b1b12;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.menu-item img:hover:not(:disabled) {
-  transform: scale(1.05);
+.menu-item button:hover {
+  background-color: #e0b015;
 }
 
-/* کنترل‌های تعداد */
 .quantity-control {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   gap: 10px;
 }
 
 .quantity-control button {
-  padding: 8px 12px;
-  font-size: 16px;
-  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  background-color: #f5c518;
+  color: #2b1b12;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.quantity-control span {
-  font-weight: 700;
-  color: #5e2919;
+.quantity-control button:hover {
+  background-color: #e0b015;
 }
 
-/* سفارش شما */
 .order {
-  background: #f1e9df;
+  margin-top: 40px;
   padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(94, 41, 25, 0.2);
-  max-width: 100%;
-  margin: 0 auto 30px;
+  background-color: #3c2317;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .order h2 {
-  margin-bottom: 15px;
-  font-weight: 900;
   font-size: 1.8rem;
-  color: #5e2919;
-  text-align: center;
+  margin-bottom: 20px;
+  color: #f9f6f2;
 }
 
 .order ul {
   list-style: none;
-  margin-bottom: 15px;
-  max-height: 250px;
-  overflow-y: auto;
-  padding-right: 8px;
-  user-select: text;
+  padding: 0;
 }
 
-.order ul li {
-  padding: 8px 0;
-  border-bottom: 1px solid #d6c9b8;
+.order-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 600;
-  font-size: 1rem;
-  color: #6a4a2d;
+  padding: 10px;
+  border-bottom: 1px solid #f9f6f2;
 }
 
-.order ul li button.remove-button {
-  padding: 6px 10px;
-  font-size: 14px;
-  background: #b44332;
+.order-item span {
+  color: #f9f6f2;
+}
+
+.remove-button {
+  background-color: #d32f2f;
+  color: #f9f6f2;
+  border: none;
   border-radius: 8px;
-  transition: background 0.3s ease;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.order ul li button.remove-button:hover:not(:disabled) {
-  background: #d65447;
+.remove-button:hover {
+  background-color: #b71c1c;
 }
 
-.order .total-price {
+.total-price {
   font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 15px;
-  text-align: center;
-  color: #5e2919;
+  font-weight: bold;
+  color: #f5c518;
+  margin: 20px 0;
 }
 
-.order input[type="number"] {
+.input-field {
+  padding: 10px;
+  border: 1px solid #f9f6f2;
+  border-radius: 8px;
   width: 100%;
-  padding: 10px 12px;
-  font-size: 16px;
-  border: 2px solid #5e2919;
+  max-width: 300px;
+  margin: 10px 0;
+  font-size: 1rem;
+  background-color: #4a2b1a;
+  color: #f9f6f2;
+}
+
+.input-field::placeholder {
+  color: #b0a8a0;
+}
+
+.order button {
+  padding: 10px 20px;
+  border: none;
   border-radius: 8px;
-  outline: none;
-  margin-bottom: 15px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  direction: ltr;
-  -webkit-appearance: none;
-  -moz-appearance: textfield;
+  background-color: #f5c518;
+  color: #2b1b12;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.order input[type="number"]:focus {
-  border-color: #7c3f24;
-  box-shadow: 0 0 6px rgba(124, 63, 36, 0.3);
+.order button:hover {
+  background-color: #e0b015;
 }
 
-.order > button {
-  display: block;
-  margin: 0 auto;
-  padding: 10px 30px;
-  font-size: 16px;
-  font-weight: 700;
+.go-to-order {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #f5c518;
+  color: #2b1b12;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+}
+
+.go-to-order:hover {
+  background-color: #e0b015;
+}
+
+.pages-button {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.pages-button button {
+  padding: 10px 20px;
+  border: none;
   border-radius: 8px;
+  background-color: #4a2b1a;
+  color: #f9f6f2;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-/* پنل ورود */
+.pages-button button:hover {
+  background-color: #f5c518;
+  color: #2b1b12;
+}
+
 .login-panel {
-  max-width: 90%;
-  margin: 40px auto;
+  max-width: 400px;
+  margin: 50px auto;
   padding: 20px;
-  background: #f1e9df;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(94, 41, 25, 0.2);
-  text-align: center;
+  background-color: #3c2317;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .login-panel h2 {
+  font-size: 1.8rem;
   margin-bottom: 20px;
-  font-weight: 900;
-  font-size: 1.7rem;
-  color: #5e2919;
+  color: #f9f6f2;
 }
 
-.login-panel input {
-  width: 100%;
-  padding: 10px 12px;
-  font-size: 16px;
-  border: 2px solid #5e2919;
+.discount-teaser {
+  font-size: 1.1rem;
+  color: #f5c518;
+  background-color: #4a2b1a;
+  padding: 10px;
   border-radius: 8px;
-  outline: none;
-  margin-bottom: 15px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  direction: ltr;
-}
-
-.login-panel input:focus {
-  border-color: #7c3f24;
-  box-shadow: 0 0 6px rgba(124, 63, 36, 0.3);
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .login-panel button {
-  margin: 0 5px;
-  padding: 8px 18px;
+  padding: 10px 20px;
+  border: none;
   border-radius: 8px;
+  background-color: #f5c518;
+  color: #2b1b12;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 10px 5px;
+  transition: background-color 0.3s;
 }
 
-/* داشبورد */
+.login-panel button:hover {
+  background-color: #e0b015;
+}
+
 .dashboard {
-  max-width: 90%;
-  margin: 40px auto;
+  max-width: 600px;
+  margin: 50px auto;
   padding: 20px;
-  background: #f1e9df;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(94, 41, 25, 0.2);
-  text-align: center;
+  background-color: #3c2317;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .dashboard h2 {
+  font-size: 1.8rem;
   margin-bottom: 20px;
-  font-weight: 900;
-  font-size: 1.7rem;
-  color: #5e2919;
+  color: #f9f6f2;
 }
 
-.dashboard .discount-info {
+.discount-info {
   font-size: 1rem;
-  font-weight: 600;
-  color: #6a4a2d;
+  color: #f9f6f2;
   margin-bottom: 20px;
-}
-
-.dashboard h3 {
-  margin: 20px 0 15px;
-  font-weight: 700;
-  font-size: 1.4rem;
-  color: #5e2919;
-}
-
-.dashboard .discount-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
-  padding-right: 8px;
-  max-height: 280px;
-  overflow-y: auto;
-}
-
-.dashboard .discount-card {
-  background: linear-gradient(135deg, #5e2919 0%, #7c3f24 100%);
-  color: #fff;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(94, 41, 25, 0.3);
-  transition: transform 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.dashboard .discount-card:hover:not(.expired) {
-  transform: translateY(-3px);
-}
-
-.dashboard .discount-card.expired {
-  background: #999;
-  box-shadow: none;
-  opacity: 0.7;
-}
-
-.dashboard .discount-card .discount-congrats {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #28a745;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 5px 10px;
-  border-radius: 5px;
-  margin-bottom: 12px;
-  animation: pulse 1.5s infinite;
-}
-
-.dashboard .discount-card .discount-code {
-  font-size: 1rem;
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 5px 10px;
-  border-radius: 5px;
-  margin: 8px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.dashboard .discount-card .discount-code button.copy-button {
-  padding: 4px 8px;
-  font-size: 0.9rem;
-  background: #28a745;
-  border-radius: 5px;
-}
-
-.dashboard .discount-card .discount-code button.copy-button:hover:not(:disabled) {
-  background: #218838;
-}
-
-.dashboard .discount-card .discount-amount {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #f5c518;
-  margin: 8px 0;
-}
-
-.dashboard .discount-card .discount-timer {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #fff;
-  margin: 8px 0;
-}
-
-.dashboard .discount-card .discount-timer.warning {
-  color: #ff4d4d;
-  animation: shake 0.5s infinite;
-}
-
-.dashboard .discount-card .discount-date {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #e6d9cb;
-  margin: 8px 0;
-  display: flex;
-  align-items: center;
-  gap: 5px;
 }
 
 .dashboard button {
-  margin: 8px 5px;
-  padding: 8px 20px;
-  font-size: 15px;
+  padding: 10px 20px;
+  border: none;
   border-radius: 8px;
+  background-color: #f5c518;
+  color: #2b1b12;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 10px 0;
+  transition: background-color 0.3s;
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-  100% { transform: scale(1); }
+.dashboard button:hover {
+  background-color: #e0b015;
 }
 
-@keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-2px); }
-  50% { transform: translateX(2px); }
-  75% { transform: translateX(-2px); }
-  100% { transform: translateX(0); }
+.discount-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-/* شرایط بازی */
+.discount-card {
+  background-color: #4a2b1a;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.discount-card.expired {
+  opacity: 0.6;
+}
+
+.discount-congrats {
+  font-size: 1.1rem;
+  color: #f5c518;
+  margin-bottom: 10px;
+}
+
+.discount-code {
+  font-size: 1rem;
+  color: #f9f6f2;
+  margin-bottom: 10px;
+}
+
+.discount-code button {
+  margin-right: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: #f5c518;
+  color: #2b1b12;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.discount-code button:hover {
+  background-color: #e0b015;
+}
+
+.discount-amount {
+  font-size: 1rem;
+  color: #f5c518;
+  margin-bottom: 10px;
+}
+
+.discount-timer {
+  font-size: 1rem;
+  color: #f9f6f2;
+  margin-bottom: 10px;
+}
+
+.discount-timer.warning {
+  color: #d32f2f;
+}
+
+.discount-date {
+  font-size: 0.9rem;
+  color: #b0a8a0;
+}
+
 .game-rules {
-  max-width: 90%;
-  margin: 40px auto;
+  max-width: 600px;
+  margin: 50px auto;
   padding: 20px;
-  background: #f1e9df;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(94, 41, 25, 0.2);
-  text-align: center;
+  background-color: #3c2317;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .game-rules h2 {
+  font-size: 1.8rem;
   margin-bottom: 20px;
-  font-weight: 900;
-  font-size: 1.7rem;
-  color: #5e2919;
+  color: #f9f6f2;
 }
 
 .game-rules ul {
-  list-style: disc inside;
-  margin-bottom: 20px;
-  padding-right: 8px;
-  text-align: right;
+  list-style: disc;
+  padding-right: 20px;
+  color: #f9f6f2;
 }
 
-.game-rules ul li {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #6a4a2d;
+.game-rules li {
   margin-bottom: 10px;
 }
 
 .game-rules button {
-  margin: 8px 5px;
-  padding: 8px 20px;
-  font-size: 15px;
+  padding: 10px 20px;
+  border: none;
   border-radius: 8px;
+  background-color: #f5c518;
+  color: #2b1b12;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 10px 5px;
+  transition: background-color 0.3s;
 }
 
-/* بازی */
+.game-rules button:hover {
+  background-color: #e0b015;
+}
+
 .game {
-  max-width: 90%;
-  margin: 40px auto;
+  max-width: 600px;
+  margin: 50px auto;
   padding: 20px;
-  background: #f1e9df;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(94, 41, 25, 0.2);
-  text-align: center;
+  background-color: #3c2317;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .game h2 {
+  font-size: 1.8rem;
   margin-bottom: 20px;
-  font-weight: 900;
-  font-size: 1.7rem;
-  color: #5e2919;
+  color: #f9f6f2;
 }
 
 .game p {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #6a4a2d;
-  margin-bottom: 15px;
+  font-size: 1.2rem;
+  color: #f9f6f2;
+  margin-bottom: 10px;
+}
+
+.timer-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 10px auto;
+}
+
+.timer-bar {
+  width: 100%;
+  height: 20px;
+  background-color: #4a2b1a;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.timer-progress {
+  height: 100%;
+  background-color: #f5c518;
+  transition: width 1s linear;
+}
+
+.timer-progress.warning {
+  background-color: #d32f2f;
 }
 
 .game ul {
   list-style: none;
-  margin-bottom: 20px;
-  padding-right: 8px;
+  padding: 0;
 }
 
-.game ul li {
-  margin-bottom: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #6a4a2d;
-  cursor: pointer;
-  text-align: right;
+.game li {
+  margin: 10px 0;
 }
 
-.game ul li label {
+.game label {
   display: flex;
   align-items: center;
-  gap: 8px;
-  justify-content: flex-end;
-  padding: 8px 10px;
-  border-radius: 8px;
-  transition: background 0.3s ease;
-}
-
-.game ul li label:hover:not(:disabled),
-.game ul li input[type="radio"]:checked + label {
-  background: #d9cbbf;
-  box-shadow: 0 2px 6px rgba(94, 41, 25, 0.2);
-}
-
-.game ul li input[type="radio"] {
+  font-size: 1rem;
+  color: #f9f6f2;
   cursor: pointer;
-  width: 18px;
-  height: 18px;
+}
+
+.game input[type="radio"] {
+  margin-left: 10px;
 }
 
 .game button {
-  padding: 10px 30px;
-  font-size: 16px;
-  font-weight: 700;
+  padding: 10px 20px;
+  border: none;
   border-radius: 8px;
+  background-color: #f5c518;
+  color: #2b1b12;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s;
 }
 
-/* نتیجه بازی */
+.game button:hover {
+  background-color: #e0b015;
+}
+
+.game button:disabled {
+  background-color: #b0a8a0;
+  cursor: not-allowed;
+}
+
 .game-result {
-  max-width: 90%;
-  margin: 40px auto;
+  max-width: 600px;
+  margin: 50px auto;
   padding: 20px;
-  background: #f1e9df;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(94, 41, 25, 0.2);
-  text-align: center;
+  background-color: #3c2317;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .game-result h2 {
+  font-size: 1.8rem;
   margin-bottom: 20px;
-  font-weight: 900;
-  font-size: 1.7rem;
-  color: #5e2919;
+  color: #f9f6f2;
 }
 
 .game-result p {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #6a4a2d;
-  margin-bottom: 15px;
+  font-size: 1.2rem;
+  color: #f9f6f2;
+  margin-bottom: 10px;
 }
 
-.game-result p.discount {
-  color: #28a745;
-  font-weight: 700;
-  font-size: 1.2rem;
-  background: #e6ffed;
-  padding: 8px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(40, 167, 69, 0.2);
-  animation: pulse 1.5s infinite;
+.game-result .discount {
+  font-size: 1.1rem;
+  color: #f5c518;
+  margin-bottom: 20px;
 }
 
 .game-result button {
-  margin: 8px 5px;
-  padding: 8px 20px;
-  font-size: 15px;
+  padding: 10px 20px;
+  border: none;
   border-radius: 8px;
+  background-color: #f5c518;
+  color: #2b1b12;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 10px 5px;
+  transition: background-color 0.3s;
 }
 
-/* پنل مدیریت */
+.game-result button:hover {
+  background-color: #e0b015;
+}
+
 .admin-panel {
-  max-width: 90%;
-  margin: 30px auto;
-  background: #f9f6f2;
-  border-radius: 12px;
+  max-width: 800px;
+  margin: 50px auto;
   padding: 20px;
-  box-shadow: 0 4px 15px rgba(94, 41, 25, 0.2);
-  color: #5e2919;
+  background-color: #3c2317;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .admin-panel h2 {
-  text-align: center;
+  font-size: 1.8rem;
   margin-bottom: 20px;
-  font-size: 1.7rem;
-  font-weight: 900;
+  color: #f9f6f2;
+}
+
+.admin-panel p {
+  font-size: 1.2rem;
+  color: #f9f6f2;
+  margin-bottom: 20px;
 }
 
 .orders-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 20px;
 }
 
 .order-admin-item {
-  background: #f1e9df;
+  background-color: #4a2b1a;
   padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 3px 8px rgba(94, 41, 25, 0.15);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .order-admin-item h3 {
+  font-size: 1.5rem;
   margin-bottom: 10px;
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: #5e2919;
+  color: #f9f6f2;
 }
 
 .order-admin-item p {
-  margin-bottom: 10px;
-  font-weight: 600;
   font-size: 1rem;
+  color: #f9f6f2;
+  margin-bottom: 10px;
 }
 
 .order-admin-item ul {
-  list-style: disc inside;
-  margin-bottom: 12px;
-  color: #6a4a2d;
-  font-weight: 500;
-  padding-right: 8px;
+  list-style: disc;
+  padding-right: 20px;
+  color: #f9f6f2;
 }
 
-.order-admin-item ul li {
-  padding: 4px 0;
-  font-size: 1rem;
+.order-admin-item li {
+  margin-bottom: 5px;
 }
 
 .order-admin-item button {
-  margin-right: 10px;
-  padding: 8px 14px;
-  font-size: 14px;
-  background: #28a745;
+  padding: 10px 20px;
+  border: none;
   border-radius: 8px;
-  transition: background 0.3s ease;
+  background-color: #f5c518;
+  color: #2b1b12;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.order-admin-item button:hover:not(:disabled) {
-  background: #218838;
+.order-admin-item button:hover {
+  background-color: #e0b015;
 }
 
 .chart-container {
-  max-width: 100%;
-  margin: 20px auto;
-  background: #fff;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
 }
 
-.admin-panel > button {
-  margin: 8px 5px;
-  padding: 8px 20px;
-  font-size: 15px;
+.loading-text {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #4a2b1a;
+  color: #f9f6f2;
+  padding: 10px;
   border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* مودال انتخاب طعم */
+.error-text {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  background-color: #d32f2f;
+  color: #f9f6f2;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.error-text.fade-in {
+  opacity: 1;
+}
+
+.error-text.fade-out {
+  opacity: 0;
+}
+
 .flavor-selector-modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(50, 30, 10, 0.7);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 1000;
+  align-items: center;
 }
 
-.flavor-selector-modal > div {
-  background: #f9f6f2;
-  padding: 20px 25px;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(50, 30, 10, 0.4);
-  max-width: 85%;
-  min-width: 260px;
-  text-align: center;
+.flavor-selector-modal div {
+  background-color: #3c2317;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
 }
 
 .flavor-selector-modal h3 {
-  margin-bottom: 15px;
-  font-weight: 900;
-  color: #5e2919;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #f9f6f2;
 }
 
 .flavor-selector-modal ul {
   list-style: none;
-  margin-bottom: 20px;
-  max-height: 180px;
-  overflow-y: auto;
-  padding-right: 8px;
+  padding: 0;
 }
 
-.flavor-selector-modal ul li {
-  margin-bottom: 10px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #6a4a2d;
-  cursor: pointer;
-  text-align: right;
+.flavor-selector-modal li {
+  margin: 10px 0;
 }
 
 .flavor-selector-modal label {
-  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
-  justify-content: flex-end;
-  padding: 8px 10px;
-  border-radius: 8px;
-  transition: background 0.3s ease;
-}
-
-.flavor-selector-modal label:hover:not(:disabled) {
-  background: #d9cbbf;
+  font-size: 1rem;
+  color: #f9f6f2;
+  cursor: pointer;
 }
 
 .flavor-selector-modal input[type="radio"] {
-  cursor: pointer;
-  width: 18px;
-  height: 18px;
+  margin-left: 10px;
 }
 
 .flavor-selector-modal button {
-  margin: 0 5px;
-  padding: 8px 18px;
-  border-radius: 8px;
-}
-
-/* دکمه فلش به سمت پایین */
-.go-to-order {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: linear-gradient(135deg, #5e2919 0%, #7c3f24 100%);
-  color: #fff;
+  padding: 10px 20px;
   border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  border-radius: 8px;
+  background-color: #f5c518;
+  color: #2b1b12;
+  font-size: 1rem;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(94, 41, 25, 0.4);
-  z-index: 1000;
-  font-size: 24px;
-  transition: all 0.3s ease;
+  margin: 10px 5px;
+  transition: background-color 0.3s;
 }
 
-.go-to-order:hover:not(:disabled) {
-  background: linear-gradient(135deg, #7c3f24 0%, #9b5432 100%);
-  transform: scale(1.1);
+.flavor-selector-modal button:hover {
+  background-color: #e0b015;
 }
 
-/* تایمر بازی */
-.timer-container {
-  margin-bottom: 20px;
-}
-
-.timer-bar {
-  width: 100%;
-  height: 10px;
-  background: #e0e0e0;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.timer-progress {
-  height: 100%;
-  background: linear-gradient(90deg, #5e2919 0%, #7c3f24 100%);
-  transition: width 1s linear;
-}
-
-.timer-progress.warning {
-  background: linear-gradient(90deg, #b44332 0%, #d65447 100%);
-  animation: shake 0.5s infinite;
-}
-
-/* پاسخگویی برای موبایل */
+/* استایل‌های ریسپانسیو برای موبایل */
 @media (max-width: 768px) {
-  body {
-    padding: 10px;
-  }
-
   .menu {
-    grid-template-columns: 1fr;
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    padding: 15px;
   }
 
   .menu-item {
-    height: 360px; /* کاهش ارتفاع به دلیل حذف ستاره‌ها */
-    padding: 12px;
+    height: 360px;
   }
 
-  .menu-item img {
-    height: 200px;
+  .cafe-title {
+    font-size: 2rem;
   }
 
-  .menu-item h3 {
-    font-size: 1.1rem;
-  }
-
-  .menu-item p {
-    font-size: 0.95rem;
-  }
-
-  .error-text, .loading-text {
+  .category-buttons button {
+    padding: 8px 16px;
     font-size: 0.9rem;
-    padding: 10px 15px;
-    max-width: 95%;
-  }
-
-  .pages-button {
-    gap: 10px;
   }
 
   .pages-button button {
-    padding: 8px 20px;
-    font-size: 15px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
   }
 
-  h1 {
-    font-size: 2rem;
+  .login-panel {
+    margin: 20px;
+    padding: 15px;
+  }
+
+  .dashboard {
+    margin: 20px;
+    padding: 15px;
+  }
+
+  .game-rules {
+    margin: 20px;
+    padding: 15px;
+  }
+
+  .game {
+    margin: 20px;
+    padding: 15px;
+  }
+
+  .game-result {
+    margin: 20px;
+    padding: 15px;
+  }
+
+  .admin-panel {
+    margin: 20px;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu {
+    grid-template-columns: 1fr;
+  }
+
+  .menu-item {
+    height: 340px;
+  }
+
+  .cafe-title {
+    font-size: 1.8rem;
   }
 
   .category-buttons {
@@ -915,342 +795,16 @@ h1 {
   }
 
   .category-buttons button {
-    padding: 8px 15px;
-    font-size: 14px;
-    background-color: #4a2b1a; /* پس‌زمینه تیره‌تر برای موبایل */
-    color: #f9f6f2; /* متن سفید برای خوانایی */
-  }
-
-  .category-buttons button.active,
-  .category-buttons button:hover:not(:disabled) {
-    background-color: #5e2919;
-    color: #f9f6f2;
-    box-shadow: 0 5px 12px rgba(94, 41, 25, 0.5);
-  }
-
-  .order {
-    padding: 15px;
-  }
-
-  .order h2 {
-    font-size: 1.6rem;
-  }
-
-  .order ul li {
-    font-size: 0.95rem;
-  }
-
-  .order .total-price {
-    font-size: 1.1rem;
-  }
-
-  .order input[type="number"] {
-    padding: 8px 10px;
-    font-size: 15px;
-  }
-
-  .order > button {
-    padding: 8px 25px;
-    font-size: 15px;
-  }
-
-  .login-panel {
-    padding: 15px;
-    margin: 30px auto;
-  }
-
-  .login-panel h2 {
-    font-size: 1.6rem;
-  }
-
-  .login-panel input {
-    padding: 8px 10px;
-    font-size: 15px;
-  }
-
-  .login-panel button {
-    padding: 8px 16px;
-    font-size: 14px;
-  }
-
-  .dashboard,
-  .game,
-  .game-rules,
-  .game-result {
-    margin: 30px auto;
-    padding: 15px;
-  }
-
-  .dashboard h2,
-  .game h2,
-  .game-rules h2,
-  .game-result h2 {
-    font-size: 1.6rem;
-  }
-
-  .dashboard .discount-info,
-  .game p,
-  .game-rules ul li,
-  .game-result p {
-    font-size: 0.95rem;
-  }
-
-  .dashboard .discount-card p {
-    font-size: 0.9rem;
-  }
-
-  .game ul li,
-  .dashboard .discount-cards {
-    font-size: 0.9rem;
-  }
-
-  .game ul li label {
-    padding: 6px 8px;
-  }
-
-  .game button,
-  .game-rules button,
-  .game-result button {
-    padding: 8px 20px;
-    font-size: 14px;
-  }
-
-  .admin-panel {
-    padding: 15px;
-  }
-
-  .admin-panel h2 {
-    font-size: 1.6rem;
-  }
-
-  .order-admin-item h3 {
-    font-size: 1.1rem;
-  }
-
-  .order-admin-item p {
-    font-size: 0.95rem;
-  }
-
-  .order-admin-item ul li {
-    font-size: 0.9rem;
-  }
-
-  .order-admin-item button {
     padding: 6px 12px;
-    font-size: 13px;
-  }
-
-  .chart-container {
-    padding: 10px;
-  }
-
-  .flavor-selector-modal > div {
-    padding: 15px 20px;
-    min-width: 240px;
-    max-width: 90%;
-  }
-
-  .flavor-selector-modal h3 {
-    font-size: 1.3rem;
-  }
-
-  .flavor-selector-modal ul li {
-    font-size: 0.95rem;
-  }
-
-  .go-to-order {
-    width: 45px;
-    height: 45px;
-    font-size: 22px;
-    bottom: 15px;
-    right: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  body {
-    padding: 8px;
-  }
-
-  .menu-item {
-    height: 340px; /* کاهش ارتفاع به دلیل حذف ستاره‌ها */
-    padding: 12px;
-  }
-
-  .menu-item img {
-    height: 180px;
-  }
-
-  .menu-item h3 {
-    font-size: 1rem;
-  }
-
-  .menu-item p {
-    font-size: 0.9rem;
-  }
-
-  .error-text, .loading-text {
-    font-size: 0.85rem;
-    padding: 8px 12px;
-  }
-
-  h1 {
-    font-size: 1.8rem;
-  }
-
-  .category-buttons button {
-    padding: 7px 12px;
-    font-size: 13px;
-    background-color: #4a2b1a; /* پس‌زمینه تیره‌تر برای موبایل */
-    color: #f9f6f2; /* متن سفید برای خوانایی */
-  }
-
-  .category-buttons button.active,
-  .category-buttons button:hover:not(:disabled) {
-    background-color: #5e2919;
-    color: #f9f6f2;
-    box-shadow: 0 5px 12px rgba(94, 41, 25, 0.5);
+    font-size: 0.8rem;
   }
 
   .pages-button button {
-    padding: 7px 18px;
-    font-size: 14px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
   }
 
-  .order {
-    padding: 12px;
-  }
-
-  .order h2 {
-    font-size: 1.5rem;
-  }
-
-  .order ul li {
-    font-size: 0.9rem;
-  }
-
-  .order .total-price {
-    font-size: 1rem;
-  }
-
-  .order input[type="number"] {
-    padding: 7px 8px;
-    font-size: 14px;
-  }
-
-  .order > button {
-    padding: 7px 20px;
-    font-size: 14px;
-  }
-
-  .login-panel {
-    padding: 12px;
-    margin: 20px auto;
-  }
-
-  .login-panel h2 {
-    font-size: 1.5rem;
-  }
-
-  .login-panel input {
-    padding: 7px 8px;
-    font-size: 14px;
-  }
-
-  .login-panel button {
-    padding: 7px 14px;
-    font-size: 13px;
-  }
-
-  .dashboard,
-  .game,
-  .game-rules,
-  .game-result {
-    margin: 20px auto;
-    padding: 12px;
-  }
-
-  .dashboard h2,
-  .game h2,
-  .game-rules h2,
-  .game-result h2 {
-    font-size: 1.5rem;
-  }
-
-  .dashboard .discount-info,
-  .game p,
-  .game-rules ul li,
-  .game-result p {
-    font-size: 0.9rem;
-  }
-
-  .dashboard .discount-card p {
-    font-size: 0.85rem;
-  }
-
-  .game ul li,
-  .dashboard .discount-cards {
-    font-size: 0.85rem;
-  }
-
-  .game ul li label {
-    padding: 5px 7px;
-  }
-
-  .game button,
-  .game-rules button,
-  .game-result button {
-    padding: 7px 18px;
-    font-size: 13px;
-  }
-
-  .admin-panel {
-    padding: 12px;
-  }
-
-  .admin-panel h2 {
-    font-size: 1.5rem;
-  }
-
-  .order-admin-item h3 {
-    font-size: 1rem;
-  }
-
-  .order-admin-item p {
-    font-size: 0.9rem;
-  }
-
-  .order-admin-item ul li {
-    font-size: 0.85rem;
-  }
-
-  .order-admin-item button {
-    padding: 5px 10px;
-    font-size: 12px;
-  }
-
-  .chart-container {
-    padding: 8px;
-  }
-
-  .flavor-selector-modal > div {
-    padding: 12px 15px;
-    min-width: 220px;
-  }
-
-  .flavor-selector-modal h3 {
-    font-size: 1.2rem;
-  }
-
-  .flavor-selector-modal ul li {
-    font-size: 0.9rem;
-  }
-
-  .go-to-order {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-    bottom: 10px;
-    right: 10px;
+  .input-field {
+    max-width: 100%;
   }
 }
