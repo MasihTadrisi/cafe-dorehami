@@ -797,7 +797,7 @@ function App() {
       {page === "login" && (
         <div className="login-panel">
           <h2>ورود / ثبت‌نام</h2>
-          <p className="discount-teaser">🎉 با چالش تخفیف، تا ۳۰,۰۰۰ تومان تخفیف بگیرید!</p>
+          <p className="discount-teaser">🎉 با برنده شدن در بازی، تا ۳۰,۰۰۰ تومان تخفیف بگیرید!</p>
           <input
             type="text"
             placeholder="شماره موبایل (11 رقم)"
