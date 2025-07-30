@@ -196,13 +196,13 @@
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 180px;
-  padding: 12px;
+  width: 140px;
+  padding: 8px;
   border-radius: 12px;
   background-color: #f5c518;
   color: #2b1b12;
   border: none;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: bold;
   cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 0 15px rgba(245, 197, 24, 0.5);
@@ -213,6 +213,13 @@
   justify-content: center;
   gap: 8px;
   animation: bounce 1.5s ease-in-out infinite;
+}
+
+@media (max-width: 600px) {
+  .go-to-order {
+    left: 20px;
+    transform: none;
+  }
 }
 
 .go-to-order:hover {
@@ -228,14 +235,14 @@
 }
 
 .go-to-order span {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: bold;
   color: #2b1b12;
 }
 
 .go-to-order .arrow-icon {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   stroke: #2b1b12;
 }
 
@@ -245,6 +252,17 @@
   }
   50% {
     transform: translateX(-50%) translateY(-10px);
+  }
+}
+
+@media (max-width: 600px) {
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
   }
 }
 
