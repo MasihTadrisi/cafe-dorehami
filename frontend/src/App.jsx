@@ -111,7 +111,8 @@ function App() {
   const [showError, setShowError] = useState(false);
   const orderSectionRef = useRef(null);
   const [discounts, setDiscounts] = useState([]);
-  const [countdown, setCountdown] = useState({}); // State برای تایمرهای معکوس
+  const [countdown, setCountdown] = useState({});
+  const [newDiscount, setNewDiscount] = useState(null);
 
   // Game State
   const [gameState, setGameState] = useState({
@@ -122,7 +123,7 @@ function App() {
     timeLeft: 15,
   });
 
-  // مدیریت محو شدن ارور بعد از 5 ثانیه
+  // مدیریت محو شدن ارور
   useEffect(() => {
     if (error) {
       setShowError(true);
@@ -134,7 +135,7 @@ function App() {
     }
   }, [error]);
 
-  // به‌روزرسانی تایمرهای معکوس هر ثانیه
+  // به‌روزرسانی تایمرهای معکوس
   useEffect(() => {
     const timer = setInterval(() => {
       setCountdown(prev => {
@@ -151,20 +152,14 @@ function App() {
     return () => clearInterval(timer);
   }, [discounts]);
 
-  // حذف تخفیف‌های منقضی‌شده (بیش از 12 ساعت)
+  // حذف تخفیف‌های منقضی‌شده
   useEffect(() => {
     const now = Date.now();
     const twelveHours = 12 * 60 * 60 * 1000;
-    const expiredDiscounts = discounts.filter(d => now - d.timestamp >= twelveHours);
-    if (expiredDiscounts.length > 0) {
-      setDiscounts(prev => prev.filter(d => now - d.timestamp < twelveHours));
-      expiredDiscounts.forEach(async discount => {
-        try {
-          await axios.delete(`${API_URL}/api/discounts/${discount.id}`);
-        } catch (err) {
-          console.error("Error deleting expired discount:", err);
-        }
-      });
+    const validDiscounts = discounts.filter(d => now - d.timestamp < twelveHours);
+    if (validDiscounts.length !== discounts.length) {
+      setDiscounts(validDiscounts);
+      localStorage.setItem("discounts", JSON.stringify(validDiscounts));
     }
   }, [discounts]);
 
@@ -203,27 +198,18 @@ function App() {
     }
   }, []);
 
-  const fetchDiscounts = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await axios.get(`${API_URL}/api/discounts`);
-      const now = Date.now();
-      const twelveHours = 12 * 60 * 60 * 1000;
-      const validDiscounts = res.data.filter(d => now - d.timestamp < twelveHours);
-      setDiscounts(validDiscounts);
-      const initialCountdown = {};
-      validDiscounts.forEach(discount => {
-        initialCountdown[discount.id] = getRemainingTimeInSeconds(discount.timestamp);
-      });
-      setCountdown(initialCountdown);
-    } catch (err) {
-      console.error("Fetch discounts error:", err.response || err.message);
-      setError("خطا در دریافت تخفیف‌ها: " + err.message);
-      setDiscounts([]);
-    } finally {
-      setLoading(false);
-    }
+  const fetchDiscounts = useCallback(() => {
+    const storedDiscounts = JSON.parse(localStorage.getItem("discounts") || "[]");
+    const now = Date.now();
+    const twelveHours = 12 * 60 * 60 * 1000;
+    const validDiscounts = storedDiscounts.filter(d => now - d.timestamp < twelveHours);
+    setDiscounts(validDiscounts);
+    localStorage.setItem("discounts", JSON.stringify(validDiscounts));
+    const initialCountdown = {};
+    validDiscounts.forEach(discount => {
+      initialCountdown[discount.id] = getRemainingTimeInSeconds(discount.timestamp);
+    });
+    setCountdown(initialCountdown);
   }, []);
 
   useEffect(() => {
@@ -358,6 +344,7 @@ function App() {
       selectedAnswer: null,
       timeLeft: 15,
     });
+    setNewDiscount(null);
     setPage("game");
   };
 
@@ -365,7 +352,7 @@ function App() {
     setGameState(prev => ({ ...prev, selectedAnswer: answer }));
   };
 
-  const handleNextQuestion = useCallback(async () => {
+  const handleNextQuestion = useCallback(() => {
     const { selectedAnswer, questions, currentQuestionIndex, score } = gameState;
     let newScore = score;
     if (selectedAnswer === questions[currentQuestionIndex].answer) {
@@ -385,10 +372,11 @@ function App() {
       if (finalScore >= 8 && currentUser) {
         const now = Date.now();
         const twelveHours = 12 * 60 * 60 * 1000;
-        const lastDiscount = await axios.get(
-          `${API_URL}/api/discounts?userPhone=${currentUser.phoneNumber}&_sort=timestamp&_order=desc&_limit=1`
-        );
-        if (!lastDiscount.data.length || now - lastDiscount.data[0].timestamp > twelveHours) {
+        const storedDiscounts = JSON.parse(localStorage.getItem("discounts") || "[]");
+        const lastDiscount = storedDiscounts
+          .filter(d => d.userPhone === currentUser.phoneNumber)
+          .sort((a, b) => b.timestamp - a.timestamp)[0];
+        if (!lastDiscount || now - lastDiscount.timestamp > twelveHours) {
           let discountAmount = 0;
           if (finalScore === 8) discountAmount = 10000;
           else if (finalScore === 9) discountAmount = 20000;
@@ -402,15 +390,17 @@ function App() {
               userPhone: currentUser.phoneNumber,
               id: Date.now().toString(),
             };
-            await axios.post(`${API_URL}/api/discounts`, newDiscount);
-            setDiscounts(prev => [
-              ...prev.filter(d => now - d.timestamp < twelveHours),
+            const updatedDiscounts = [
+              ...storedDiscounts.filter(d => now - d.timestamp < twelveHours),
               newDiscount,
-            ]);
+            ];
+            localStorage.setItem("discounts", JSON.stringify(updatedDiscounts));
+            setDiscounts(updatedDiscounts);
             setCountdown(prev => ({
               ...prev,
               [newDiscount.id]: twelveHours / 1000,
             }));
+            setNewDiscount(newDiscount);
           }
         }
       }
@@ -439,7 +429,6 @@ function App() {
     return `${days[date.getDay()]}، ${date.toLocaleDateString("fa-IR")}`;
   };
 
-  // کپی کد تخفیف به کلیپ‌بورد
   const copyDiscountCode = code => {
     navigator.clipboard.writeText(code).then(() => {
       setError("کد تخفیف کپی شد!");
@@ -963,15 +952,34 @@ function App() {
         <div className="game-result">
           <h2>نتیجه بازی</h2>
           <p>امتیاز شما: {gameState.score} از 10</p>
-          {gameState.score >= 8 && discounts.find(d => d.userPhone === currentUser.phoneNumber && getRemainingTimeInSeconds(d.timestamp) > 0) && (
+          {gameState.score >= 8 && (newDiscount || discounts.find(d => d.userPhone === currentUser.phoneNumber && getRemainingTimeInSeconds(d.timestamp) > 0)) && (
             <p className="discount">
               تبریک! شما {gameState.score === 8 ? 10000 : gameState.score === 9 ? 20000 : 30000} تومان تخفیف گرفتید!
+              {newDiscount && (
+                <>
+                  <br />
+                  کد تخفیف: {newDiscount.code}
+                  <button
+                    className="copy-button"
+                    onClick={() => copyDiscountCode(newDiscount.code)}
+                    disabled={loading}
+                  >
+                    کپی
+                  </button>
+                </>
+              )}
             </p>
           )}
           <button onClick={startGame} disabled={loading}>
             بازی دوباره
           </button>
-          <button onClick={() => setPage("dashboard")} disabled={loading}>
+          <button
+            onClick={() => {
+              setNewDiscount(null);
+              setPage("dashboard");
+            }}
+            disabled={loading}
+          >
             بازگشت به داشبورد
           </button>
         </div>
