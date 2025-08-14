@@ -84,7 +84,7 @@ const categorizedMenu = {
   ],
   "قلیون": [
     { id: 54, name: "قلیون با سرویس ساده", price: 120000, image: "https://s3.dana.ir/dana/uploads/01/06/1399/1639418.jpg" },
-    { id: 55, name: "قلیون با سرویس ویژه", price: 200000, image: "https://baku.ws/storage/photos/uploads/thumbs/large/4yPIHvFiQUCqidR5KAwwf6Sf9VCPr1WRTvlzPR9r.webp" },
+    { id: 55, name: "قلیون با سرویس ویژه", price: 200000, image: "https://www.health4mom.org/wp-content/uploads/2024/09/dreamstime_xxl_176376572-scaled-2-1024x684.jpg" },
   ],
 };
 
