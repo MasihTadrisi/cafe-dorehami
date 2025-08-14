@@ -19,7 +19,7 @@ const API_URL = "https://cafe-backend-rrmi.onrender.com";
 const categorizedMenu = {
   "نوشیدنی‌های گرم": [
     { id: 1, name: "سرویس چای دونفره", price: 100000, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFftmc4FYop2a0r77DCRtjHZO7-nJOddA9cQ&s" },
-    { id: 2, name: "چای لیوانی", price: 40000, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-IpFAi5Z53e3kVYrDLtS3Uj1Ta3yPUFkqiA&s" },
+    { id: 2, name: "چای لیوانی", price: 50000, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-IpFAi5Z53e3kVYrDLtS3Uj1Ta3yPUFkqiA&s" },
     { id: 3, name: "چای دارچین و عسل", price: 140000, image: "https://salamatim.com/wp-content/uploads/2021/04/Health-Benefits-Of-Cinnamon-Tea2.jpg" },
     { id: 4, name: "چای ماسالا", price: 130000, image: "https://sarinamasala.com/wp-content/uploads/2025/05/IMG_3828-1.jpg" },
     { id: 5, name: "قهوه لاته", price: 130000, image: "https://kalleh.com/book/wp-content/uploads/sites/2/2025/01/%D9%82%D9%87%D9%88%D9%87-%D9%84%D8%A7%D8%AA%D9%87-%DA%86%DB%8C%D8%B3%D8%AA.jpg" },
@@ -46,9 +46,9 @@ const categorizedMenu = {
   ],
   "کیک ها": [
     { id: 24, name: "کیک شکلاتی", price: 120000, image: "https://rang-rangi.ir/images/1280/cake-khis.jpg" },
-    { id: 25, name: "کیک روز", price: 140000, image: "https://zino.cafe/wp-content/uploads/2020/12/%DA%A9%DB%8C%DA%A9-%D8%B1%D9%88%D8%B2.jpg" },
-    { id: 26, name: "کیک بستنی", price: 150000, image: "https://files.namnak.com/users/sr/aup/201807/379_pics/%DA%A9%DB%8C%DA%A9-%D8%A8%D8%B3%D8%AA%D9%86%DB%8C.webp" },
-    { id: 27, name: "پنکیک نوتلا", price: 165000, image: "https://static.cdn.asset.aparat.cloud/avt/52788440-3410-l__6627.jpg?width=900&quality=90&secret=aZf9hDmNYoT_n8fU1pQDzg" },
+    { id: 25, name: "کیک روز", price: 130000, image: "https://zino.cafe/wp-content/uploads/2020/12/%DA%A9%DB%8C%DA%A9-%D8%B1%D9%88%D8%B2.jpg" },
+    { id: 26, name: "کیک بستنی", price: 130000, image: "https://files.namnak.com/users/sr/aup/201807/379_pics/%DA%A9%DB%8C%DA%A9-%D8%A8%D8%B3%D8%AA%D9%86%DB%8C.webp" },
+    { id: 27, name: "پنکیک نوتلا", price: 145000, image: "https://static.cdn.asset.aparat.cloud/avt/52788440-3410-l__6627.jpg?width=900&quality=90&secret=aZf9hDmNYoT_n8fU1pQDzg" },
   ],
   "انواع شیک": [
     { id: 28, name: "شیک نوتلا", price: 190000, image: "https://saas-behtarino.hs3.ir/media/business_products_images/img-20220909-wa0007.jpg" },
@@ -84,7 +84,7 @@ const categorizedMenu = {
   ],
   "قلیون": [
     { id: 54, name: "قلیون با سرویس ساده", price: 120000, image: "https://s3.dana.ir/dana/uploads/01/06/1399/1639418.jpg" },
-    { id: 55, name: "قلیون با سرویس ویژه", price: 200000, image: "https://www.wikiravan.com/wp-content/uploads/2019/09/%D9%82%D9%84%DB%8C%D8%A7%D9%86-%DA%A9%D8%B4%DB%8C%D8%AF%D9%86.jpg" },
+    { id: 55, name: "قلیون با سرویس ویژه", price: 200000, image: "https://baku.ws/storage/photos/uploads/thumbs/large/4yPIHvFiQUCqidR5KAwwf6Sf9VCPr1WRTvlzPR9r.webp" },
   ],
 };
 
